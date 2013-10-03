@@ -1,0 +1,27 @@
+﻿<mui:ModernWindow x:Class="IfsSvnAdmin.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+        Title="IFS SVN Admin" 
+        Height="720" 
+        Width="1280" 
+        Icon="/IfsSvnAdmin;component/Martz90-Circle-Addon2-Downloads.ico" 
+        WindowStartupLocation="CenterScreen" 
+        WindowStyle="SingleBorderWindow"
+        ContentSource="/UserControls/UserControlCheckOut.xaml" Closing="ModernWindow_Closing">
+    <mui:ModernWindow.TitleLinks>
+        <mui:Link DisplayName="Settings" Source="/UserControls/UserControlSettings.xaml"/>
+    </mui:ModernWindow.TitleLinks>
+    <mui:ModernWindow.MenuLinkGroups>
+        <mui:LinkGroup DisplayName="Ordinary" >
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="Check Out" Source="/UserControls/UserControlCheckOut.xaml"/>
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+        <mui:LinkGroup DisplayName="Mind Blowing " >
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="Search For Branch" Source="/UserControls/UserControlSearchBranch.xaml"/>
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+    </mui:ModernWindow.MenuLinkGroups>
+</mui:ModernWindow>

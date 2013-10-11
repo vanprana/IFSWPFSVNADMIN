@@ -25,7 +25,7 @@ namespace IfsSvnAdmin.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\මට බෑ Pumali")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\SvnCheckOut")]
         public string WorkSpace {
             get {
                 return ((string)(this["WorkSpace"]));
@@ -80,6 +80,42 @@ namespace IfsSvnAdmin.Properties {
             }
             set {
                 this["Pattern"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SelectedProjectForBranchCreate {
+            get {
+                return ((string)(this["SelectedProjectForBranchCreate"]));
+            }
+            set {
+                this["SelectedProjectForBranchCreate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("peumali.sudasinghe@ifsworld.com")]
+        public string SupportPerson {
+            get {
+                return ((string)(this["SupportPerson"]));
+            }
+            set {
+                this["SupportPerson"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Houston, we have a problem!")]
+        public string HeaderMessage {
+            get {
+                return ((string)(this["HeaderMessage"]));
+            }
+            set {
+                this["HeaderMessage"] = value;
             }
         }
     }

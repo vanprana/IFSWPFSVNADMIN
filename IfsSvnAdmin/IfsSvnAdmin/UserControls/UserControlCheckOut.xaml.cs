@@ -31,10 +31,13 @@ namespace IfsSvnAdmin.UserControls
         private delegate void client_NotifyDelegate(object sender, SvnNotifyEventArgs e);
 
         private BitmapImage bi;
+        private IfsSvn myIfsSvn;
 
         public UserControlCheckOut()
         {
             InitializeComponent();
+
+            myIfsSvn = new IfsSvn();
 
             this.backgroundWorkerCheckOut = new BackgroundWorker();
             this.backgroundWorkerCheckOut.WorkerSupportsCancellation = true;
@@ -51,7 +54,7 @@ namespace IfsSvnAdmin.UserControls
         {
             try
             {
-                if (buttonCheckOut.Content.ToString() == "CheckOut")
+                if (buttonCheckOut.Content.ToString() == "Check Out")
                 {
                     this.StartCheckOut();
                 }
@@ -75,20 +78,20 @@ namespace IfsSvnAdmin.UserControls
             {                
                 if (backgroundWorkerCheckOut.IsBusy == false)
                 {
-                    if (treeViewProjectList.SelectedItem != null &&
-                        (treeViewProjectList.SelectedItem as TreeViewItem).Tag != null)
+                    if (listBoxProjectList.SelectedItem != null &&
+                        (listBoxProjectList.SelectedItem as ListBoxItem).Tag != null)
                     {
                         buttonCheckOut.Content = "Cancel";
 
-                        string projectPath = ((treeViewProjectList.SelectedItem as TreeViewItem).Tag as SvnProject).Path;
+                        string projectPath = ((listBoxProjectList.SelectedItem as ListBoxItem).Tag as SvnProject).Path;
 
                         SvnComponent[] compornentArray = new SvnComponent[listBoxComponents.SelectedItems.Count];
                         listBoxComponents.SelectedItems.CopyTo(compornentArray, 0);
                         Uri projectUri = new Uri(projectPath + Properties.Settings.Default.ServerWorkSpace + "/");
 
-                        backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(CheckOutType.CheckOut,
-                                                                                      projectUri, 
-                                                                                      textBoxCheckOutPath.Text, 
+                        backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(JobType.CheckOut,
+                                                                                      projectUri,
+                                                                                      textBoxWorkSpace.Text, 
                                                                                       compornentArray));
                     }
                 }
@@ -173,11 +176,11 @@ namespace IfsSvnAdmin.UserControls
                 {
                     CheckOutArguments arg = e.Argument as CheckOutArguments;
 
-                    if (arg.Type == CheckOutType.Load)
+                    if (arg.Type == JobType.Load)
                     {
-                        e.Result = this.LoadProjects();
+                        e.Result = myIfsSvn.GetProjectList();
                     }
-                    else if (arg.Type == CheckOutType.CheckOut)
+                    else if (arg.Type == JobType.CheckOut)
                     {
                         this.CheckOutProject(arg);
                         e.Result = null;
@@ -197,45 +200,12 @@ namespace IfsSvnAdmin.UserControls
                 throw;
             }
         }
-
-        private List<SvnProject> LoadProjects()
-        {
-            try
-            {
-                using (SvnClient client = new SvnClient())
-                {
-                    // Bind the SharpSvn UI to our client for SSL certificate and credentials
-                    SvnUIBindArgs bindArgs = new SvnUIBindArgs();
-                    SvnUI.Bind(client, bindArgs);
-                                        
-                    Collection<SvnListEventArgs> projectList;                    
-                    List<SvnProject> nodeList = new List<SvnProject>();
-                    if (client.GetList(this.projectsUri, out projectList))
-                    {
-                        foreach (SvnListEventArgs project in projectList)
-                        {
-                            if (project.Entry.NodeKind == SvnNodeKind.Directory &&
-                                string.IsNullOrWhiteSpace(project.Path) == false)
-                            {                               
-                                nodeList.Add(new SvnProject(project));
-                            }
-                        }
-                    }
-
-                    return nodeList;
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
+               
         private void backgroundWorkerCheckOut_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             try
             {
-                TreeView myTreeView = treeViewProjectList as TreeView;
+                ListBox myListBox = listBoxProjectList as ListBox;
 
                 if (e.Error != null)
                 {
@@ -248,18 +218,18 @@ namespace IfsSvnAdmin.UserControls
                 {
                     if (e.Result != null)
                     {
-                        List<SvnProject> nodeList = e.Result as List<SvnProject>;
-                        TreeViewItem rootNode = myTreeView.Items[0] as TreeViewItem;
-                        rootNode.IsExpanded = true;
+                        List<SvnListEventArgs> nodeList = e.Result as List<SvnListEventArgs>;
+
+                        nodeList.RemoveAt(0);
 
                         StackPanel treeItemStack;
                         Label lbl;
                         Image treeItemImage;
-                        TreeViewItem nodeItem;
-                        List<TreeViewItem> nodeItemList = new List<TreeViewItem>(); 
-                        foreach (SvnProject project in nodeList)
+                        ListBoxItem nodeItem;
+                        List<ListBoxItem> nodeItemList = new List<ListBoxItem>();
+                        foreach (SvnListEventArgs project in nodeList)
                         {
-                            nodeItem = new TreeViewItem();
+                            nodeItem = new ListBoxItem();
 
                             treeItemStack = new StackPanel();
                             treeItemStack.Orientation = Orientation.Horizontal;
@@ -273,33 +243,33 @@ namespace IfsSvnAdmin.UserControls
                             treeItemStack.Children.Add(treeItemImage);
                             treeItemStack.Children.Add(lbl);
 
-                            nodeItem.Header = treeItemStack;
-                            nodeItem.Tag = project;
+                            nodeItem.Content = treeItemStack;
+                            nodeItem.Tag = new SvnProject(project);
                             
                             nodeItemList.Add(nodeItem);
                         }
 
                         if (nodeItemList.Count > 0)
                         {
-                            rootNode.ItemsSource = nodeItemList;                            
+                            listBoxProjectList.ItemsSource = nodeItemList;                            
                         }
 
                         if (string.IsNullOrWhiteSpace(Properties.Settings.Default.SelectedProject) == false &&
                             Properties.Settings.Default.SelectedProject != "ProjectsRoot")
                         {
-                            foreach (TreeViewItem item in rootNode.Items)
+                            foreach (ListBoxItem item in listBoxProjectList.Items)
                             {
                                 if ((item.Tag as SvnProject).Name == Properties.Settings.Default.SelectedProject)
                                 {
-                                    item.IsSelected = true;
-                                    item.BringIntoView();
+                                    listBoxProjectList.SelectedItem = item;                     
+                                    listBoxProjectList.ScrollIntoView(item);
                                     break;
                                 }
                             }
                         }
                     }
                 }
-                buttonCheckOut.Content = "CheckOut";
+                buttonCheckOut.Content = "Check Out";
                 textBoxLog.AppendText("Done!\r\n");
 
             }
@@ -322,9 +292,9 @@ namespace IfsSvnAdmin.UserControls
             {
                 if (backgroundWorkerCheckOut.IsBusy == false)
                 {
-                    backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(CheckOutType.Load));
+                    backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(JobType.Load));
 
-                    textBoxCheckOutPath.Text = textBoxWorkSpace.Text + @"\";
+                    textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\";
                 }
             }
             catch (Exception ex)
@@ -333,37 +303,19 @@ namespace IfsSvnAdmin.UserControls
             }
         }
 
-        private void treeViewProjectList_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void listBoxProjectList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
-                listBoxComponents.Items.Clear();
-                TreeViewItem seletedNode = e.NewValue as TreeViewItem;
+                listBoxComponents.ItemsSource = null;
+                ListBoxItem seletedNode = listBoxProjectList.SelectedItem as ListBoxItem;
 
-                if (seletedNode.Tag != null)
+                if (seletedNode != null &&
+                    seletedNode.Tag != null)
                 {
                     SvnProject seletedProject = seletedNode.Tag as SvnProject;
-
-                    using (SvnClient client = new SvnClient())
-                    {
-                        SvnUriTarget projectUri = new SvnUriTarget(seletedProject.Path + Properties.Settings.Default.ServerWorkSpace + "/");
-
-                        string components;
-                        client.TryGetProperty(projectUri, SvnPropertyNames.SvnExternals, out components);
-
-                        if (string.IsNullOrWhiteSpace(components) == false)
-                        {
-                            string[] componentInforArray = components.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-                            SvnComponent component;
-                            foreach (string componentInfor in componentInforArray)
-                            {
-                                component = new SvnComponent(componentInfor);
-                                listBoxComponents.Items.Add(component);
-                            }
-                        }
-                    }
-                    textBoxCheckOutPath.Text = textBoxWorkSpace.Text + @"\" + seletedProject.Name + @"\" + Properties.Settings.Default.ServerWorkSpace;
+                    listBoxComponents.ItemsSource = myIfsSvn.GetComponentListFromExternals(seletedProject);
+                    textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\" + seletedProject.Name + @"\" + Properties.Settings.Default.ServerWorkSpace;
 
                     Properties.Settings.Default.SelectedProject = seletedProject.Name;
                 }
@@ -375,16 +327,54 @@ namespace IfsSvnAdmin.UserControls
                                  "Error Loading Components",
                                  MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        } 
+        
+        private bool ListBoxComponentsFilter(object item)
+        {
+            SvnComponent component = item as SvnComponent;
+            return component.Name.Contains(textBoxComponentFilter.Text);
         }
 
-        private void textBoxWorkSpace_TextChanged(object sender, TextChangedEventArgs e)
+        private void textBoxComponentFilter_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
-                textBoxCheckOutPath.Text = textBoxWorkSpace.Text + @"\";
-                if (treeViewProjectList.SelectedItem is SvnProject)
+                listBoxComponents.Items.Filter = ListBoxComponentsFilter;
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private bool ListBoxProjectsFilter(object item)
+        {
+            SvnProject project = (item as ListBoxItem).Tag as SvnProject;
+            return project.Name.Contains(textBoxProjectsFilter.Text);
+        }
+
+        private void textBoxProjectsFilter_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                listBoxProjectList.Items.Filter = ListBoxProjectsFilter;
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void textBoxProjectRoot_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\";
+                ListBoxItem seletedNode = listBoxProjectList.SelectedItem as ListBoxItem;
+                if (seletedNode.Tag != null)
                 {
-                    textBoxCheckOutPath.Text += (treeViewProjectList.SelectedItem as SvnProject).Name + @"\" + Properties.Settings.Default.ServerWorkSpace;
+                    if (seletedNode.Tag is SvnProject)
+                    {
+                        textBoxWorkSpace.Text += (seletedNode.Tag as SvnProject).Name + @"\" + Properties.Settings.Default.ServerWorkSpace;
+                    }
                 }
             }
             catch (Exception)
@@ -392,9 +382,27 @@ namespace IfsSvnAdmin.UserControls
             }
         }
 
-        private void treeViewProjectList_KeyDown(object sender, KeyEventArgs e)
+        private void menuItemClearSelection_Click(object sender, RoutedEventArgs e)
         {
-            
+            try
+            {
+                listBoxComponents.UnselectAll();
+            }
+            catch (Exception)
+            {
+            }
         }
+
+        private void menuItemSelectAll_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                listBoxComponents.SelectAll();
+            }
+            catch (Exception)
+            {
+            }
+        }
+                               
     }
 }

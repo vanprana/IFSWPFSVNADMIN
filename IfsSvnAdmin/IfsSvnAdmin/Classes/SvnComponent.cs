@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SharpSvn;
 
 namespace IfsSvnAdmin.Classes
 {
@@ -16,6 +17,12 @@ namespace IfsSvnAdmin.Classes
 
             this.Path = values[0];
             this.Name = values[1];
+        }
+
+        internal SvnComponent(SvnListEventArgs component)
+        {
+            this.Path = component.Uri.AbsoluteUri;
+            this.Name = component.Name;
         }
 
         public override string ToString()

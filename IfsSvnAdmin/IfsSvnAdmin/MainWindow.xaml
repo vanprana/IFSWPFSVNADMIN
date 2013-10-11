@@ -21,6 +21,7 @@
         <mui:LinkGroup DisplayName="Mind Blowing " >
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="Search For Branch" Source="/UserControls/UserControlSearchBranch.xaml"/>
+                <mui:Link DisplayName="Tag and Branch Manager" Source="/UserControls/UserControlManageTagBranch.xaml"/>
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
     </mui:ModernWindow.MenuLinkGroups>

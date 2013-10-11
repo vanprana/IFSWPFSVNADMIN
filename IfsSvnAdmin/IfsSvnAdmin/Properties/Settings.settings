@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="WorkSpace" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\මට බෑ Pumali</Value>
+      <Value Profile="(Default)">C:\SvnCheckOut</Value>
     </Setting>
     <Setting Name="ServerWorkSpace" Type="System.String" Scope="User">
       <Value Profile="(Default)">workspace</Value>
@@ -16,6 +16,15 @@
     </Setting>
     <Setting Name="Pattern" Type="System.String" Scope="User">
       <Value Profile="(Default)">*Converge*</Value>
+    </Setting>
+    <Setting Name="SelectedProjectForBranchCreate" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SupportPerson" Type="System.String" Scope="User">
+      <Value Profile="(Default)">peumali.sudasinghe@ifsworld.com</Value>
+    </Setting>
+    <Setting Name="HeaderMessage" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Houston, we have a problem!</Value>
     </Setting>
   </Settings>
 </SettingsFile>

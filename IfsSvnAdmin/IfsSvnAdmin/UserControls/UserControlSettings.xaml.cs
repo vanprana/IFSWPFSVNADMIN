@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IfsSvnAdmin.Classes;
 
 namespace IfsSvnAdmin.UserControls
 {
@@ -19,6 +20,8 @@ namespace IfsSvnAdmin.UserControls
     /// </summary>
     public partial class UserControlSettings : UserControl
     {
+        private NotifierLync myNotifierLync;
+
         public UserControlSettings()
         {
             InitializeComponent();
@@ -33,6 +36,43 @@ namespace IfsSvnAdmin.UserControls
             catch (Exception)
             {
 
+            }
+        }
+
+        private void buttonContactSupport_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (myNotifierLync != null)
+                {
+                    MessageBoxResult contact = Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow,
+                                    "Do you really need to contact Me? :| ",
+                                    "Contact Support",
+                                    MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (contact == MessageBoxResult.Yes)
+                    {
+                        myNotifierLync.SendMessage(Properties.Settings.Default.HeaderMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow,
+                                  ex.Message,
+                                  "Error in Lync",
+                                  MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                myNotifierLync = new NotifierLync();
+            }
+            catch (Exception)
+            {
+                buttonContactSupport.IsEnabled = false;
             }
         }
     }

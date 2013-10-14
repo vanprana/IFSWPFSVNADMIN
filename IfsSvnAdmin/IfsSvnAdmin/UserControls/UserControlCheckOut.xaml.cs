@@ -30,7 +30,10 @@ namespace IfsSvnAdmin.UserControls
         private readonly SvnUriTarget projectsUri = new SvnUriTarget(Properties.Settings.Default.ServerUri + "/projects");
         private delegate void client_NotifyDelegate(object sender, SvnNotifyEventArgs e);
 
-        private BitmapImage bi;
+        private BitmapImage projectImage;
+        private BitmapImage componentImage;
+        private BitmapImage checkOutImage;
+        private BitmapImage cancelImage;
         private IfsSvn myIfsSvn;
 
         public UserControlCheckOut()
@@ -43,22 +46,70 @@ namespace IfsSvnAdmin.UserControls
             this.backgroundWorkerCheckOut.WorkerSupportsCancellation = true;
             this.backgroundWorkerCheckOut.DoWork += new DoWorkEventHandler(this.backgroundWorkerCheckOut_DoWork);
             this.backgroundWorkerCheckOut.RunWorkerCompleted += new RunWorkerCompletedEventHandler(this.backgroundWorkerCheckOut_RunWorkerCompleted);
-              
-            bi = new BitmapImage();
-            bi.BeginInit();
-            bi.UriSource = new Uri(@"/IfsSvnAdmin;component/Resources/folder.png", UriKind.RelativeOrAbsolute);
-            bi.EndInit();
+
+            projectImage = new BitmapImage();
+            projectImage.BeginInit();
+            projectImage.UriSource = new Uri(@"/IfsSvnAdmin;component/Resources/project.png", UriKind.RelativeOrAbsolute);
+            projectImage.EndInit();
+
+            componentImage = new BitmapImage();
+            componentImage.BeginInit();
+            componentImage.UriSource = new Uri(@"/IfsSvnAdmin;component/Resources/folder.png", UriKind.RelativeOrAbsolute);
+            componentImage.EndInit();
+
+            checkOutImage = new BitmapImage();
+            checkOutImage.BeginInit();
+            checkOutImage.UriSource = new Uri(@"/IfsSvnAdmin;component/Resources/checkout.png", UriKind.RelativeOrAbsolute);
+            checkOutImage.EndInit();
+
+            cancelImage = new BitmapImage();
+            cancelImage.BeginInit();
+            cancelImage.UriSource = new Uri(@"/IfsSvnAdmin;component/Resources/cancel.png", UriKind.RelativeOrAbsolute);
+            cancelImage.EndInit();
+        }
+
+        private ButtonState ButtonState
+        {
+            get
+            {
+                string buttonText = ((buttonCheckOut.Content as StackPanel).Children[1] as Label).Content.ToString();
+                if (buttonText == "Check Out")
+                {
+                    return ButtonState.CheckOut;
+                }
+                else
+                {
+                    return ButtonState.Cancel;
+                }
+            }
+            set
+            {
+                ImageSource source = null;
+                string buttonText = string.Empty;
+                if (value == Classes.ButtonState.CheckOut)
+                {
+                    buttonText = "Check Out";
+                    source = this.checkOutImage;
+                }
+                else
+                {
+                    buttonText = "Cancel";
+                    source = this.cancelImage;
+                }
+                ((buttonCheckOut.Content as StackPanel).Children[0] as Image).Source = source;
+                ((buttonCheckOut.Content as StackPanel).Children[1] as Label).Content = buttonText;
+            }
         }
 
         private void buttonCheckOut_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (buttonCheckOut.Content.ToString() == "Check Out")
+                if (this.ButtonState == ButtonState.CheckOut)
                 {
                     this.StartCheckOut();
                 }
-                else if (buttonCheckOut.Content.ToString() == "Cancel")
+                else if (this.ButtonState == ButtonState.Cancel)
                 {
                     this._cancelCheckout = true;
                 }
@@ -75,23 +126,26 @@ namespace IfsSvnAdmin.UserControls
         private void StartCheckOut()
         {
             try
-            {                
+            {
                 if (backgroundWorkerCheckOut.IsBusy == false)
                 {
                     if (listBoxProjectList.SelectedItem != null &&
                         (listBoxProjectList.SelectedItem as ListBoxItem).Tag != null)
                     {
-                        buttonCheckOut.Content = "Cancel";
+                        this.ButtonState = ButtonState.Cancel;
 
                         string projectPath = ((listBoxProjectList.SelectedItem as ListBoxItem).Tag as SvnProject).Path;
 
-                        SvnComponent[] compornentArray = new SvnComponent[listBoxComponents.SelectedItems.Count];
-                        listBoxComponents.SelectedItems.CopyTo(compornentArray, 0);
+                        ListBoxItem[] listItemArray = new ListBoxItem[listBoxComponents.SelectedItems.Count];
+                        listBoxComponents.SelectedItems.CopyTo(listItemArray, 0);
+
+                        SvnComponent[] compornentArray = listItemArray.Select(i => i.Tag as SvnComponent).ToArray();
+
                         Uri projectUri = new Uri(projectPath + Properties.Settings.Default.ServerWorkSpace + "/");
 
                         backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(JobType.CheckOut,
                                                                                       projectUri,
-                                                                                      textBoxWorkSpace.Text, 
+                                                                                      textBoxWorkSpace.Text,
                                                                                       compornentArray));
                     }
                 }
@@ -200,7 +254,7 @@ namespace IfsSvnAdmin.UserControls
                 throw;
             }
         }
-               
+
         private void backgroundWorkerCheckOut_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             try
@@ -223,7 +277,7 @@ namespace IfsSvnAdmin.UserControls
                         nodeList.RemoveAt(0);
 
                         StackPanel treeItemStack;
-                        Label lbl;
+                        TextBlock lbl;
                         Image treeItemImage;
                         ListBoxItem nodeItem;
                         List<ListBoxItem> nodeItemList = new List<ListBoxItem>();
@@ -234,24 +288,26 @@ namespace IfsSvnAdmin.UserControls
                             treeItemStack = new StackPanel();
                             treeItemStack.Orientation = Orientation.Horizontal;
 
-                            lbl = new Label();
-                            lbl.Content = project.Name;
+                            lbl = new TextBlock();
+                            lbl.Text = project.Name;
+                            lbl.Margin = new Thickness(3, 1, 3, 1);
 
                             treeItemImage = new Image();
-                            treeItemImage.Source = bi;
+                            treeItemImage.Source = projectImage;
+                            treeItemImage.Margin = new Thickness(3, 1, 3, 1);
 
                             treeItemStack.Children.Add(treeItemImage);
                             treeItemStack.Children.Add(lbl);
 
                             nodeItem.Content = treeItemStack;
                             nodeItem.Tag = new SvnProject(project);
-                            
+
                             nodeItemList.Add(nodeItem);
                         }
 
                         if (nodeItemList.Count > 0)
                         {
-                            listBoxProjectList.ItemsSource = nodeItemList;                            
+                            listBoxProjectList.ItemsSource = nodeItemList;
                         }
 
                         if (string.IsNullOrWhiteSpace(Properties.Settings.Default.SelectedProject) == false &&
@@ -261,7 +317,7 @@ namespace IfsSvnAdmin.UserControls
                             {
                                 if ((item.Tag as SvnProject).Name == Properties.Settings.Default.SelectedProject)
                                 {
-                                    listBoxProjectList.SelectedItem = item;                     
+                                    listBoxProjectList.SelectedItem = item;
                                     listBoxProjectList.ScrollIntoView(item);
                                     break;
                                 }
@@ -269,7 +325,7 @@ namespace IfsSvnAdmin.UserControls
                         }
                     }
                 }
-                buttonCheckOut.Content = "Check Out";
+                this.ButtonState = ButtonState.CheckOut;
                 textBoxLog.AppendText("Done!\r\n");
 
             }
@@ -314,7 +370,43 @@ namespace IfsSvnAdmin.UserControls
                     seletedNode.Tag != null)
                 {
                     SvnProject seletedProject = seletedNode.Tag as SvnProject;
-                    listBoxComponents.ItemsSource = myIfsSvn.GetComponentListFromExternals(seletedProject);
+                    List<SvnComponent> componentList = myIfsSvn.GetComponentListFromExternals(seletedProject);
+
+                    StackPanel treeItemStack;
+                    TextBlock lbl;
+                    Image treeItemImage;
+                    ListBoxItem nodeItem;
+                    List<ListBoxItem> nodeItemList = new List<ListBoxItem>();
+
+                    foreach (SvnComponent component in componentList)
+                    {
+                        nodeItem = new ListBoxItem();
+
+                        treeItemStack = new StackPanel();
+                        treeItemStack.Orientation = Orientation.Horizontal;
+
+                        lbl = new TextBlock();
+                        lbl.Text = component.Name;
+                        lbl.Margin = new Thickness(3, 1, 3, 1);
+
+                        treeItemImage = new Image();
+                        treeItemImage.Source = componentImage;
+                        treeItemImage.Margin = new Thickness(3, 1, 3, 1);
+
+                        treeItemStack.Children.Add(treeItemImage);
+                        treeItemStack.Children.Add(lbl);
+
+                        nodeItem.Content = treeItemStack;
+                        nodeItem.Tag = component;
+
+                        nodeItemList.Add(nodeItem);
+                    }
+
+                    if (nodeItemList.Count > 0)
+                    {
+                        listBoxComponents.ItemsSource = nodeItemList;
+                    }
+
                     textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\" + seletedProject.Name + @"\" + Properties.Settings.Default.ServerWorkSpace;
 
                     Properties.Settings.Default.SelectedProject = seletedProject.Name;
@@ -327,11 +419,11 @@ namespace IfsSvnAdmin.UserControls
                                  "Error Loading Components",
                                  MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        } 
-        
+        }
+
         private bool ListBoxComponentsFilter(object item)
         {
-            SvnComponent component = item as SvnComponent;
+            SvnComponent component = (item as ListBoxItem).Tag as SvnComponent;
             return component.Name.Contains(textBoxComponentFilter.Text);
         }
 
@@ -403,6 +495,6 @@ namespace IfsSvnAdmin.UserControls
             {
             }
         }
-                               
+
     }
 }

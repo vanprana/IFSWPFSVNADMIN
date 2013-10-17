@@ -24,6 +24,6 @@
         <TextBox Grid.Column="1" Grid.Row="1" Height="23" Name="textBoxPattern" Text="{Binding Source={x:Static p:Settings.Default}, Path=Pattern, Mode=TwoWay}" Margin="3"/>
         <Button Content="Find" Grid.Column="1" Grid.Row="2" Height="30" HorizontalAlignment="Right" Name="buttonFind" Width="75" Margin="3" Click="buttonFind_Click" />
         <TextBox Grid.Row="3" Grid.ColumnSpan="2" Name="textBoxLog" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="3" IsReadOnly="True" />
-        <ProgressBar Grid.Row="4" Grid.ColumnSpan="2" Height="20" Name="progressBarSearch" />
+        <ProgressBar Grid.Row="4" Grid.ColumnSpan="2" Height="20" Name="progressBarSearch" IsIndeterminate="False" />
     </Grid>
 </UserControl>

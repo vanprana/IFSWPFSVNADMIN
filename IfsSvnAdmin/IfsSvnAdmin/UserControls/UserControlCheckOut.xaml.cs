@@ -16,6 +16,8 @@ using IfsSvnAdmin.Classes;
 using SharpSvn;
 using SharpSvn.UI;
 using System.Collections.ObjectModel;
+using FirstFloor.ModernUI.Windows.Controls;
+using System.IO;
 
 namespace IfsSvnAdmin.UserControls
 {
@@ -116,10 +118,7 @@ namespace IfsSvnAdmin.UserControls
             }
             catch (Exception ex)
             {
-                Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow,
-                                  ex.Message,
-                                  "Error Checking out Components",
-                                  MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(ex.Message, "Error Checking out Components", MessageBoxButton.OK);
             }
         }
 
@@ -132,6 +131,7 @@ namespace IfsSvnAdmin.UserControls
                     if (listBoxProjectList.SelectedItem != null &&
                         (listBoxProjectList.SelectedItem as ListBoxItem).Tag != null)
                     {
+                        progressBarMain.Visibility = System.Windows.Visibility.Visible;
                         this.ButtonState = ButtonState.Cancel;
 
                         string projectPath = ((listBoxProjectList.SelectedItem as ListBoxItem).Tag as SvnProject).Path;
@@ -263,10 +263,7 @@ namespace IfsSvnAdmin.UserControls
 
                 if (e.Error != null)
                 {
-                    Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow,
-                                                      e.Error.Message,
-                                                      "Error Checking out Components",
-                                                      MessageBoxButton.OK, MessageBoxImage.Error);
+                    ModernDialog.ShowMessage(e.Error.Message, "Error Checking out Components", MessageBoxButton.OK);
                 }
                 else
                 {
@@ -331,13 +328,11 @@ namespace IfsSvnAdmin.UserControls
             }
             catch (Exception ex)
             {
-                Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow,
-                              ex.Message,
-                              "Error",
-                              MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(ex.Message, "Error", MessageBoxButton.OK);
             }
             finally
             {
+                progressBarMain.Visibility = System.Windows.Visibility.Hidden;
                 this._cancelCheckout = false;
             }
         }
@@ -348,6 +343,8 @@ namespace IfsSvnAdmin.UserControls
             {
                 if (backgroundWorkerCheckOut.IsBusy == false)
                 {
+                    progressBarMain.Visibility = System.Windows.Visibility.Visible;
+
                     backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(JobType.Load));
 
                     textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\";
@@ -355,7 +352,7 @@ namespace IfsSvnAdmin.UserControls
             }
             catch (Exception ex)
             {
-                Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow, ex.Message, "Error Loading", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(ex.Message, "Error Loading Page", MessageBoxButton.OK);
             }
         }
 
@@ -414,10 +411,7 @@ namespace IfsSvnAdmin.UserControls
             }
             catch (Exception ex)
             {
-                Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow,
-                                 ex.Message,
-                                 "Error Loading Components",
-                                 MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(ex.Message, "Error Loading Components", MessageBoxButton.OK);
             }
         }
 
@@ -459,7 +453,21 @@ namespace IfsSvnAdmin.UserControls
         {
             try
             {
-                textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\";
+                string projectRoot = textBoxProjectRoot.Text;
+                if (projectRoot.EndsWith(@"\") == false)
+                {
+                    projectRoot += @"\";
+                }
+                if (Directory.Exists(projectRoot))
+                {
+                    textBoxProjectRoot.BorderBrush = (new BrushConverter().ConvertFrom("#FFCCCCCC") as SolidColorBrush);
+                }
+                else
+                {
+                    textBoxProjectRoot.BorderBrush = Brushes.Red;
+                }
+
+                textBoxWorkSpace.Text = projectRoot;
                 ListBoxItem seletedNode = listBoxProjectList.SelectedItem as ListBoxItem;
                 if (seletedNode.Tag != null)
                 {
@@ -485,6 +493,29 @@ namespace IfsSvnAdmin.UserControls
             }
         }
 
+        private void menuItemSelectCheckedOut_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string workSpace = textBoxWorkSpace.Text;
+                if (workSpace.EndsWith(@"\") == false)
+                {
+                    workSpace += @"\";
+                }
+
+                SvnComponent component;
+                foreach (ListBoxItem item in listBoxComponents.Items)
+                {
+                    component = item.Tag as SvnComponent;
+                    item.IsSelected = Directory.Exists(workSpace + component.Name);
+                }
+            }
+            catch (Exception ex)
+            {
+                ModernDialog.ShowMessage(ex.Message, "Error Loading Checked Out Components", MessageBoxButton.OK);
+            }
+        }
+
         private void menuItemSelectAll_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -496,5 +527,57 @@ namespace IfsSvnAdmin.UserControls
             }
         }
 
+        private void buttonGoToPath_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("explorer", textBoxWorkSpace.Text);
+            }
+            catch (Exception ex)
+            {
+                ModernDialog.ShowMessage(ex.Message, "Error navigation to folder path", MessageBoxButton.OK);
+            }
+        }
+
+        private void textBoxWorkSpace_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                buttonGoToPath.IsEnabled = Directory.Exists(textBoxWorkSpace.Text);
+                if (buttonGoToPath.IsEnabled)
+                {
+                    buttonGoToPath.Opacity = 1;
+                    textBoxWorkSpace.BorderBrush = (new BrushConverter().ConvertFrom("#FFCCCCCC") as SolidColorBrush);                     
+                }
+                else
+                {
+                    buttonGoToPath.Opacity = 0.5;
+                    textBoxWorkSpace.BorderBrush = Brushes.Red;
+                }
+                menuItemSelectCheckedOut.IsEnabled = buttonGoToPath.IsEnabled;
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void buttonProjectRoot_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
+                dialog.Description = "Please Select your Project-Root folder";
+                
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    textBoxProjectRoot.Text = dialog.SelectedPath;
+                }
+            }
+            catch (Exception ex)
+            {
+                ModernDialog.ShowMessage(ex.Message, "Error selecting Project-Root folder", MessageBoxButton.OK);
+            }
+        }
     }
 }

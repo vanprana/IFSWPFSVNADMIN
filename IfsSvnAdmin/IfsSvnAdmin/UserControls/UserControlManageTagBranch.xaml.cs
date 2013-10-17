@@ -16,6 +16,7 @@ using IfsSvnAdmin.Classes;
 using SharpSvn;
 using SharpSvn.UI;
 using System.Collections.ObjectModel;
+using FirstFloor.ModernUI.Windows.Controls;
 
 namespace IfsSvnAdmin.UserControls
 {
@@ -26,8 +27,6 @@ namespace IfsSvnAdmin.UserControls
     {
         private BackgroundWorker backgroundWorkerLoad;
         private delegate void backgroundWorkerLoad_RunWorkerCompletedDelegate(object sender, RunWorkerCompletedEventArgs e);
-
-
 
         private BitmapImage rootBi;
         private BitmapImage bi;
@@ -100,10 +99,7 @@ namespace IfsSvnAdmin.UserControls
                 {
                     if (e.Error != null)
                     {
-                        Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow,
-                                                      e.Error.Message,
-                                                      "Error setting Log",
-                                                      MessageBoxButton.OK, MessageBoxImage.Error);
+                        ModernDialog.ShowMessage(e.Error.Message, "Error setting Log", MessageBoxButton.OK);
                     }
                     else if (e.Cancelled)
                     {
@@ -130,10 +126,7 @@ namespace IfsSvnAdmin.UserControls
                 }
                 catch (Exception ex)
                 {
-                    Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow,
-                              ex.Message,
-                              "Error",
-                              MessageBoxButton.OK, MessageBoxImage.Error);
+                    ModernDialog.ShowMessage(ex.Message, "Error", MessageBoxButton.OK);
                 }
                 finally
                 {
@@ -153,7 +146,7 @@ namespace IfsSvnAdmin.UserControls
             }
             catch (Exception ex)
             {
-                Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow, ex.Message, "Error Loading", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(ex.Message, "Error Loading", MessageBoxButton.OK);
             }
         }
 
@@ -222,7 +215,7 @@ namespace IfsSvnAdmin.UserControls
             }
             catch (Exception ex)
             {
-                Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow, ex.Message, "Error Loading", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(ex.Message, "Error Loading", MessageBoxButton.OK);
             }
         }
 

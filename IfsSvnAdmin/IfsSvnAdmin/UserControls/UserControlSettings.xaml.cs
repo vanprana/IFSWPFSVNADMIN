@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using IfsSvnAdmin.Classes;
+using FirstFloor.ModernUI.Windows.Controls;
 
 namespace IfsSvnAdmin.UserControls
 {
@@ -45,10 +46,10 @@ namespace IfsSvnAdmin.UserControls
             {
                 if (myNotifierLync != null)
                 {
-                    MessageBoxResult contact = Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow,
-                                    "Do you really need to contact Me? :| ",
-                                    "Contact Support",
-                                    MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    MessageBoxResult contact = ModernDialog.ShowMessage(
+                                                              "Do you really need to contact Me? :| ",
+                                                              "Contact Support",
+                                                              MessageBoxButton.YesNo);
                     if (contact == MessageBoxResult.Yes)
                     {
                         myNotifierLync.SendMessage(Properties.Settings.Default.HeaderMessage);
@@ -57,10 +58,7 @@ namespace IfsSvnAdmin.UserControls
             }
             catch (Exception ex)
             {
-                Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow,
-                                  ex.Message,
-                                  "Error in Lync",
-                                  MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(ex.Message, "Error", MessageBoxButton.OK);
             }
         }
 

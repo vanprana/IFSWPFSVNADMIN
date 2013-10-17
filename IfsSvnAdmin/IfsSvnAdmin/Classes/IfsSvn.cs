@@ -48,7 +48,7 @@ namespace IfsSvnAdmin.Classes
                     // Bind the SharpSvn UI to our client for SSL certificate and credentials
                     SvnUIBindArgs bindArgs = new SvnUIBindArgs();
                     SvnUI.Bind(client, bindArgs);
-
+                    
                     Collection<SvnListEventArgs> itemList;
                     if (client.GetList(targetUri, out itemList))
                     {

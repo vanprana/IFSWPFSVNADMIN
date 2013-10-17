@@ -17,6 +17,7 @@ using SharpSvn.UI;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using IfsSvnAdmin.Classes;
+using FirstFloor.ModernUI.Windows.Controls;
 
 namespace IfsSvnAdmin.UserControls
 {
@@ -63,10 +64,7 @@ namespace IfsSvnAdmin.UserControls
             }
             catch (Exception ex)
             {
-                Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow,
-                             ex.Message,
-                             "Error",
-                             MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(ex.Message, "Error", MessageBoxButton.OK);
             }
         }
 
@@ -177,10 +175,7 @@ namespace IfsSvnAdmin.UserControls
                 {
                     if (e.Error != null)
                     {
-                        Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow,
-                                                      e.Error.Message,
-                                                      "Error setting Log",
-                                                      MessageBoxButton.OK, MessageBoxImage.Error);
+                        ModernDialog.ShowMessage(e.Error.Message, "Error setting Log", MessageBoxButton.OK);
                     }
                     else if (e.Cancelled)
                     {
@@ -194,10 +189,7 @@ namespace IfsSvnAdmin.UserControls
                 }
                 catch (Exception ex)
                 {
-                    Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow,
-                              ex.Message,
-                              "Error",
-                              MessageBoxButton.OK, MessageBoxImage.Error);
+                    ModernDialog.ShowMessage(ex.Message, "Error", MessageBoxButton.OK);
                 }
                 finally
                 {                    

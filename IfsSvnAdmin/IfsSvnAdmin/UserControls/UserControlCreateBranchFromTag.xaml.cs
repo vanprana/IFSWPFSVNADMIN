@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using SharpSvn;
 using IfsSvnAdmin.Classes;
 using System.ComponentModel;
+using FirstFloor.ModernUI.Windows.Controls;
 
 namespace IfsSvnAdmin.UserControls
 {
@@ -58,7 +59,7 @@ namespace IfsSvnAdmin.UserControls
             }
             catch (Exception ex)
             {
-                Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow, ex.Message, "Error Loading", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(ex.Message, "Error Loading", MessageBoxButton.OK);
             }
         }
 
@@ -106,10 +107,7 @@ namespace IfsSvnAdmin.UserControls
                 {
                     if (e.Error != null)
                     {
-                        Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow,
-                                                      e.Error.Message,
-                                                      "Error setting Log",
-                                                      MessageBoxButton.OK, MessageBoxImage.Error);
+                        ModernDialog.ShowMessage(e.Error.Message, "Error setting Log", MessageBoxButton.OK);
                     }
                     else if (e.Cancelled)
                     {
@@ -140,10 +138,7 @@ namespace IfsSvnAdmin.UserControls
                 }
                 catch (Exception ex)
                 {
-                    Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow,
-                              ex.Message,
-                              "Error",
-                              MessageBoxButton.OK, MessageBoxImage.Error);
+                    ModernDialog.ShowMessage(ex.Message, "Error", MessageBoxButton.OK);
                 }
                 finally
                 {
@@ -186,7 +181,7 @@ namespace IfsSvnAdmin.UserControls
 
         private void buttonCreate_Click(object sender, RoutedEventArgs e)
         {
-            Xceed.Wpf.Toolkit.MessageBox.Show(App.Current.MainWindow, "Not implemented Yet!", "Not implemented Yet!", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+            ModernDialog.ShowMessage("Not implemented Yet!", "Implementation", MessageBoxButton.OK);
         }
     }
 }

@@ -140,12 +140,20 @@ namespace IfsSvnAdmin.UserControls
                         listBoxComponents.SelectedItems.CopyTo(listItemArray, 0);
 
                         SvnComponent[] compornentArray = listItemArray.Select(i => i.Tag as SvnComponent).ToArray();
-
-                        Uri projectUri = new Uri(projectPath + Properties.Settings.Default.ServerWorkSpace + "/");
+                        
+                        string checkOutPathProject = textBoxProjectRoot.Text + @"\";
+                        ListBoxItem seletedNode = listBoxProjectList.SelectedItem as ListBoxItem;
+                        if (seletedNode.Tag != null)
+                        {
+                            if (seletedNode.Tag is SvnProject)
+                            {
+                                checkOutPathProject += (seletedNode.Tag as SvnProject).Name + @"\";
+                            }
+                        }
 
                         backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(JobType.CheckOut,
-                                                                                      projectUri,
-                                                                                      textBoxWorkSpace.Text,
+                                                                                      projectPath,
+                                                                                      checkOutPathProject,
                                                                                       compornentArray));
                     }
                 }
@@ -167,17 +175,17 @@ namespace IfsSvnAdmin.UserControls
                 client.Notify += new EventHandler<SvnNotifyEventArgs>(client_Notify);
                 client.Cancel += new EventHandler<SvnCancelEventArgs>(client_Cancel);
 
-                Uri rootUri = client.GetRepositoryRoot(arg.ProjectUri);
+                Uri rootUri = client.GetRepositoryRoot(arg.ProjectWorkspaceUri);
 
-                client.CheckOut(arg.ProjectUri, arg.CheckOutPath, new SvnCheckOutArgs() { IgnoreExternals = true });
+                client.CheckOut(arg.ProjectNbprojectUri, arg.CheckOutPathNbproject, new SvnCheckOutArgs() { IgnoreExternals = true });
+                client.CheckOut(arg.ProjectWorkspaceUri, arg.CheckOutPathWorkspace, new SvnCheckOutArgs() { IgnoreExternals = true });
 
                 Uri componentUri;
-
                 foreach (SvnComponent component in arg.CompornentArray)
                 {
                     componentUri = new Uri(component.Path.Replace("^/", rootUri.AbsoluteUri));
 
-                    client.CheckOut(componentUri, arg.CheckOutPath + @"\" + component.Name);
+                    client.CheckOut(componentUri, arg.CheckOutPathWorkspace + @"\" + component.Name);
                 }
             }
         }
@@ -320,6 +328,23 @@ namespace IfsSvnAdmin.UserControls
                                 }
                             }
                         }
+
+                        if (Properties.Settings.Default.RememberFiltering)
+                        {
+                            textBoxProjectsFilter.Text = Properties.Settings.Default.TextBoxProjectsFilter_text;
+                            textBoxComponentFilter.Text = Properties.Settings.Default.TextBoxComponentFilter_text;
+                        }
+
+                        if (Properties.Settings.Default.SelectCheckedOutAtStartUp)
+                        {
+                            try
+                            {
+                                this.SelectCheckedOutComponents();
+                            }
+                            catch
+                            {
+                            }
+                        }
                     }
                 }
                 this.ButtonState = ButtonState.CheckOut;
@@ -341,14 +366,13 @@ namespace IfsSvnAdmin.UserControls
         {
             try
             {
+                textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\";
                 if (backgroundWorkerCheckOut.IsBusy == false)
                 {
                     progressBarMain.Visibility = System.Windows.Visibility.Visible;
 
-                    backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(JobType.Load));
-
-                    textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\";
-                }
+                    backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(JobType.Load));                                       
+                }                
             }
             catch (Exception ex)
             {
@@ -426,6 +450,11 @@ namespace IfsSvnAdmin.UserControls
             try
             {
                 listBoxComponents.Items.Filter = ListBoxComponentsFilter;
+
+                if (Properties.Settings.Default.RememberFiltering)
+                {
+                    Properties.Settings.Default.TextBoxComponentFilter_text = textBoxComponentFilter.Text;
+                }
             }
             catch (Exception)
             {
@@ -443,6 +472,11 @@ namespace IfsSvnAdmin.UserControls
             try
             {
                 listBoxProjectList.Items.Filter = ListBoxProjectsFilter;
+
+                if (Properties.Settings.Default.RememberFiltering)
+                {
+                    Properties.Settings.Default.TextBoxProjectsFilter_text = textBoxProjectsFilter.Text;
+                }
             }
             catch (Exception)
             {
@@ -493,22 +527,27 @@ namespace IfsSvnAdmin.UserControls
             }
         }
 
+        private void SelectCheckedOutComponents()
+        {
+            string workSpace = textBoxWorkSpace.Text;
+            if (workSpace.EndsWith(@"\") == false)
+            {
+                workSpace += @"\";
+            }
+
+            SvnComponent component;
+            foreach (ListBoxItem item in listBoxComponents.Items)
+            {
+                component = item.Tag as SvnComponent;
+                item.IsSelected = Directory.Exists(workSpace + component.Name);
+            }
+        }
+
         private void menuItemSelectCheckedOut_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                string workSpace = textBoxWorkSpace.Text;
-                if (workSpace.EndsWith(@"\") == false)
-                {
-                    workSpace += @"\";
-                }
-
-                SvnComponent component;
-                foreach (ListBoxItem item in listBoxComponents.Items)
-                {
-                    component = item.Tag as SvnComponent;
-                    item.IsSelected = Directory.Exists(workSpace + component.Name);
-                }
+                this.SelectCheckedOutComponents();
             }
             catch (Exception ex)
             {

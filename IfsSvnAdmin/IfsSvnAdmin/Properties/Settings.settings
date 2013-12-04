@@ -26,5 +26,20 @@
     <Setting Name="HeaderMessage" Type="System.String" Scope="User">
       <Value Profile="(Default)">Houston, we have a problem!</Value>
     </Setting>
+    <Setting Name="ServerNbProject" Type="System.String" Scope="User">
+      <Value Profile="(Default)">nbproject</Value>
+    </Setting>
+    <Setting Name="RememberFiltering" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="SelectCheckedOutAtStartUp" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="TextBoxProjectsFilter_text" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="TextBoxComponentFilter_text" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

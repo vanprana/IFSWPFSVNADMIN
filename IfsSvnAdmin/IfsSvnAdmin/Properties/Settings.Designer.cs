@@ -118,5 +118,65 @@ namespace IfsSvnAdmin.Properties {
                 this["HeaderMessage"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("nbproject")]
+        public string ServerNbProject {
+            get {
+                return ((string)(this["ServerNbProject"]));
+            }
+            set {
+                this["ServerNbProject"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RememberFiltering {
+            get {
+                return ((bool)(this["RememberFiltering"]));
+            }
+            set {
+                this["RememberFiltering"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SelectCheckedOutAtStartUp {
+            get {
+                return ((bool)(this["SelectCheckedOutAtStartUp"]));
+            }
+            set {
+                this["SelectCheckedOutAtStartUp"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TextBoxProjectsFilter_text {
+            get {
+                return ((string)(this["TextBoxProjectsFilter_text"]));
+            }
+            set {
+                this["TextBoxProjectsFilter_text"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TextBoxComponentFilter_text {
+            get {
+                return ((string)(this["TextBoxComponentFilter_text"]));
+            }
+            set {
+                this["TextBoxComponentFilter_text"] = value;
+            }
+        }
     }
 }

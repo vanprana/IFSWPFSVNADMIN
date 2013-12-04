@@ -4,7 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded" xmlns:mui="http://firstfloorsoftware.com/ModernUI">
+             d:DesignHeight="329" 
+             d:DesignWidth="480" 
+             Loaded="UserControl_Loaded" 
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:p="clr-namespace:IfsSvnAdmin.Properties">
     <Grid Style="{StaticResource ContentRoot}">
         <Button Content="Reset Settings" Height="30" HorizontalAlignment="Left" Margin="12,12,0,0" Name="button1" VerticalAlignment="Top" Width="140" Click="button1_Click" >
             <Button.Effect>
@@ -15,6 +19,12 @@
             <Button.Effect>
                 <DropShadowEffect></DropShadowEffect>
             </Button.Effect>
-        </Button>        
+        </Button>
+        <GroupBox Header="In CheckOut Window" Height="100" HorizontalAlignment="Left" Margin="12,96,0,0" Name="groupBoxCheckOutWindow" VerticalAlignment="Top" Width="332">           
+            <Grid>
+                <CheckBox Content="Remember Filtering" Height="20" HorizontalAlignment="Left" Margin="6,6,0,0" Name="checkBoxRememberFiltering" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=RememberFiltering, Mode=TwoWay}"/>
+                <CheckBox Content="Select CheckedOut Components At StartUp" Height="20" HorizontalAlignment="Left" Margin="6,32,0,0" Name="checkBoxSelectCheckedOutAtStartUp" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=SelectCheckedOutAtStartUp, Mode=TwoWay}"/>
+            </Grid>
+        </GroupBox>
     </Grid>
 </UserControl>

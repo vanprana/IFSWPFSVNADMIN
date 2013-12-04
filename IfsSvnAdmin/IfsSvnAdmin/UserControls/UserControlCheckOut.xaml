@@ -7,7 +7,8 @@
              d:DesignHeight="492" 
              d:DesignWidth="800" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             xmlns:p="clr-namespace:IfsSvnAdmin.Properties" Loaded="UserControl_Loaded">
+             xmlns:p="clr-namespace:IfsSvnAdmin.Properties"
+             Loaded="UserControl_Loaded">
     
     <Grid Style="{StaticResource ContentRoot}">
         <Grid.RowDefinitions>

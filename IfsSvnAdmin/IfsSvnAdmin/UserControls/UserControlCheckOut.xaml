@@ -42,7 +42,7 @@
                     <ContextMenu>
                         <MenuItem Header="Clear Selection" Name="menuItemClearSelection" Click="menuItemClearSelection_Click" />
                         <MenuItem Header="Select All" Name="menuItemSelectAll" Click="menuItemSelectAll_Click" />
-                        <MenuItem Header="Select Checked Out" Name="menuItemSelectCheckedOut" Click="menuItemSelectCheckedOut_Click" />
+                        <MenuItem Header="Select Checked Out" Name="menuItemSelectCheckedOut" Click="menuItemSelectCheckedOut_Click" IsCheckable="True" />
                     </ContextMenu>
                 </ListBox.ContextMenu>
             </ListBox>

@@ -314,7 +314,7 @@ namespace IfsSvnAdmin.UserControls
                         {
                             listBoxProjectList.ItemsSource = nodeItemList;
                         }
-
+                                                
                         if (string.IsNullOrWhiteSpace(Properties.Settings.Default.SelectedProject) == false &&
                             Properties.Settings.Default.SelectedProject != "ProjectsRoot")
                         {
@@ -337,13 +337,7 @@ namespace IfsSvnAdmin.UserControls
 
                         if (Properties.Settings.Default.SelectCheckedOutAtStartUp)
                         {
-                            try
-                            {
-                                this.SelectCheckedOutComponents();
-                            }
-                            catch
-                            {
-                            }
+                            this.SelectCheckedOutComponents();
                         }
                     }
                 }
@@ -431,6 +425,8 @@ namespace IfsSvnAdmin.UserControls
                     textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\" + seletedProject.Name + @"\" + Properties.Settings.Default.ServerWorkSpace;
 
                     Properties.Settings.Default.SelectedProject = seletedProject.Name;
+
+                    menuItemSelectCheckedOut.IsChecked = false;
                 }
             }
             catch (Exception ex)
@@ -521,6 +517,7 @@ namespace IfsSvnAdmin.UserControls
             try
             {
                 listBoxComponents.UnselectAll();
+                menuItemSelectCheckedOut.IsChecked = false;
             }
             catch (Exception)
             {
@@ -536,10 +533,25 @@ namespace IfsSvnAdmin.UserControls
             }
 
             SvnComponent component;
+            listBoxComponents.SelectedItem = null;
+            listBoxComponents.SelectedItems.Clear();
             foreach (ListBoxItem item in listBoxComponents.Items)
             {
                 component = item.Tag as SvnComponent;
                 item.IsSelected = Directory.Exists(workSpace + component.Name);
+                if (item.IsSelected)
+                {
+                    listBoxComponents.SelectedItems.Add(item);
+                }
+            }
+
+            if (listBoxComponents.SelectedItems.Count > 0)
+            {
+                menuItemSelectCheckedOut.IsChecked = true;
+            }
+            else
+            {
+                menuItemSelectCheckedOut.IsChecked = false;
             }
         }
 
@@ -560,6 +572,7 @@ namespace IfsSvnAdmin.UserControls
             try
             {
                 listBoxComponents.SelectAll();
+                menuItemSelectCheckedOut.IsChecked = false;
             }
             catch (Exception)
             {

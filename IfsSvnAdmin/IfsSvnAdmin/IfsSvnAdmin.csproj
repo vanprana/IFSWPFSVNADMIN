@@ -28,7 +28,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>\\ththlk1\Apps\IFS Wpf Svn Administrator 1.8\</UpdateUrl>
     <ProductName>IFS WPF SVN Manager 1.8</ProductName>
-    <ApplicationRevision>11</ApplicationRevision>
+    <ApplicationRevision>12</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

@@ -177,7 +177,9 @@ namespace IfsSvnAdmin.UserControls
 
                 Uri rootUri = client.GetRepositoryRoot(arg.ProjectWorkspaceUri);
 
-                client.CheckOut(arg.ProjectNbprojectUri, arg.CheckOutPathNbproject, new SvnCheckOutArgs() { IgnoreExternals = true });
+
+                client.CheckOut(arg.ProjectNbprojectUri, arg.CheckOutPathNbproject, new SvnCheckOutArgs() { ThrowOnError = false, IgnoreExternals = true });
+
                 client.CheckOut(arg.ProjectWorkspaceUri, arg.CheckOutPathWorkspace, new SvnCheckOutArgs() { IgnoreExternals = true });
 
                 Uri componentUri;

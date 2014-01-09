@@ -70,6 +70,24 @@ namespace IfsSvnAdmin.UserControls
             cancelImage.EndInit();
         }
 
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\";
+                if (backgroundWorkerCheckOut.IsBusy == false)
+                {
+                    progressBarMain.Visibility = System.Windows.Visibility.Visible;
+
+                    backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(JobType.Load));
+                }
+            }
+            catch (Exception ex)
+            {
+                ModernDialog.ShowMessage(ex.Message, "Error Loading Page", MessageBoxButton.OK);
+            }
+        }
+
         private ButtonState ButtonState
         {
             get
@@ -140,7 +158,7 @@ namespace IfsSvnAdmin.UserControls
                         listBoxComponents.SelectedItems.CopyTo(listItemArray, 0);
 
                         SvnComponent[] compornentArray = listItemArray.Select(i => i.Tag as SvnComponent).ToArray();
-                        
+
                         string checkOutPathProject = textBoxProjectRoot.Text + @"\";
                         ListBoxItem seletedNode = listBoxProjectList.SelectedItem as ListBoxItem;
                         if (seletedNode.Tag != null)
@@ -316,7 +334,7 @@ namespace IfsSvnAdmin.UserControls
                         {
                             listBoxProjectList.ItemsSource = nodeItemList;
                         }
-                                                
+
                         if (string.IsNullOrWhiteSpace(Properties.Settings.Default.SelectedProject) == false &&
                             Properties.Settings.Default.SelectedProject != "ProjectsRoot")
                         {
@@ -339,7 +357,8 @@ namespace IfsSvnAdmin.UserControls
 
                         if (Properties.Settings.Default.SelectCheckedOutAtStartUp)
                         {
-                            this.SelectCheckedOutComponents();
+                            buttonComponents.Tag = this.ButtonComponentTagState_SELECT_CHECKED_OUT;
+                            this.SetSelectedComponents();
                         }
                     }
                 }
@@ -355,24 +374,6 @@ namespace IfsSvnAdmin.UserControls
             {
                 progressBarMain.Visibility = System.Windows.Visibility.Hidden;
                 this._cancelCheckout = false;
-            }
-        }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\";
-                if (backgroundWorkerCheckOut.IsBusy == false)
-                {
-                    progressBarMain.Visibility = System.Windows.Visibility.Visible;
-
-                    backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(JobType.Load));                                       
-                }                
-            }
-            catch (Exception ex)
-            {
-                ModernDialog.ShowMessage(ex.Message, "Error Loading Page", MessageBoxButton.OK);
             }
         }
 
@@ -428,7 +429,8 @@ namespace IfsSvnAdmin.UserControls
 
                     Properties.Settings.Default.SelectedProject = seletedProject.Name;
 
-                    menuItemSelectCheckedOut.IsChecked = false;
+                    buttonComponents.Tag = this.ButtonComponentTagState_UNSELECT_ALL;
+                    this.SetSelectedComponents();
                 }
             }
             catch (Exception ex)
@@ -453,6 +455,11 @@ namespace IfsSvnAdmin.UserControls
                 {
                     Properties.Settings.Default.TextBoxComponentFilter_text = textBoxComponentFilter.Text;
                 }
+
+                listBoxComponents.SelectedItem = null;
+                listBoxComponents.SelectedItems.Clear();
+                buttonComponents.Tag = this.ButtonComponentTagState_UNSELECT_ALL;
+                this.SetSelectedComponents();
             }
             catch (Exception)
             {
@@ -514,71 +521,31 @@ namespace IfsSvnAdmin.UserControls
             }
         }
 
-        private void menuItemClearSelection_Click(object sender, RoutedEventArgs e)
+        private bool SelectCheckedOutComponents()
         {
-            try
-            {
-                listBoxComponents.UnselectAll();
-                menuItemSelectCheckedOut.IsChecked = false;
-            }
-            catch (Exception)
-            {
-            }
-        }
-
-        private void SelectCheckedOutComponents()
-        {
-            string workSpace = textBoxWorkSpace.Text;
-            if (workSpace.EndsWith(@"\") == false)
-            {
-                workSpace += @"\";
-            }
-
-            SvnComponent component;
             listBoxComponents.SelectedItem = null;
             listBoxComponents.SelectedItems.Clear();
-            foreach (ListBoxItem item in listBoxComponents.Items)
+            if (this.ValidateWorkSpacePath())
             {
-                component = item.Tag as SvnComponent;
-                item.IsSelected = Directory.Exists(workSpace + component.Name);
-                if (item.IsSelected)
+                string workSpace = textBoxWorkSpace.Text;
+                if (workSpace.EndsWith(@"\") == false)
                 {
-                    listBoxComponents.SelectedItems.Add(item);
+                    workSpace += @"\";
+                }
+
+                SvnComponent component;
+                foreach (ListBoxItem item in listBoxComponents.Items)
+                {
+                    component = item.Tag as SvnComponent;
+                    item.IsSelected = Directory.Exists(workSpace + component.Name);
+                    if (item.IsSelected)
+                    {
+                        listBoxComponents.SelectedItems.Add(item);
+                    }
                 }
             }
 
-            if (listBoxComponents.SelectedItems.Count > 0)
-            {
-                menuItemSelectCheckedOut.IsChecked = true;
-            }
-            else
-            {
-                menuItemSelectCheckedOut.IsChecked = false;
-            }
-        }
-
-        private void menuItemSelectCheckedOut_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                this.SelectCheckedOutComponents();
-            }
-            catch (Exception ex)
-            {
-                ModernDialog.ShowMessage(ex.Message, "Error Loading Checked Out Components", MessageBoxButton.OK);
-            }
-        }
-
-        private void menuItemSelectAll_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                listBoxComponents.SelectAll();
-                menuItemSelectCheckedOut.IsChecked = false;
-            }
-            catch (Exception)
-            {
-            }
+            return (listBoxComponents.SelectedItems.Count > 0);
         }
 
         private void buttonGoToPath_Click(object sender, RoutedEventArgs e)
@@ -597,22 +564,27 @@ namespace IfsSvnAdmin.UserControls
         {
             try
             {
-                buttonGoToPath.IsEnabled = Directory.Exists(textBoxWorkSpace.Text);
-                if (buttonGoToPath.IsEnabled)
-                {
-                    buttonGoToPath.Opacity = 1;
-                    textBoxWorkSpace.BorderBrush = (new BrushConverter().ConvertFrom("#FFCCCCCC") as SolidColorBrush);                     
-                }
-                else
-                {
-                    buttonGoToPath.Opacity = 0.5;
-                    textBoxWorkSpace.BorderBrush = Brushes.Red;
-                }
-                menuItemSelectCheckedOut.IsEnabled = buttonGoToPath.IsEnabled;
+                ValidateWorkSpacePath();
             }
             catch (Exception)
             {
             }
+        }
+
+        private bool ValidateWorkSpacePath()
+        {
+            buttonGoToPath.IsEnabled = Directory.Exists(textBoxWorkSpace.Text);
+            if (buttonGoToPath.IsEnabled)
+            {
+                buttonGoToPath.Opacity = 1;
+                textBoxWorkSpace.BorderBrush = (new BrushConverter().ConvertFrom("#FFCCCCCC") as SolidColorBrush);
+            }
+            else
+            {
+                buttonGoToPath.Opacity = 0.5;
+                textBoxWorkSpace.BorderBrush = Brushes.Red;
+            }
+            return buttonGoToPath.IsEnabled;
         }
 
         private void buttonProjectRoot_Click(object sender, RoutedEventArgs e)
@@ -621,7 +593,7 @@ namespace IfsSvnAdmin.UserControls
             {
                 System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
                 dialog.Description = "Please Select your Project-Root folder";
-                
+
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
@@ -631,6 +603,60 @@ namespace IfsSvnAdmin.UserControls
             catch (Exception ex)
             {
                 ModernDialog.ShowMessage(ex.Message, "Error selecting Project-Root folder", MessageBoxButton.OK);
+            }
+        }
+
+        private void buttonComponents_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                this.SetSelectedComponents();
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private readonly string ButtonComponentTagState_SELECT_ALL = "SELECT_ALL";
+        private readonly string ButtonComponentTagState_SELECT_CHECKED_OUT = "SELECT_CHECKED_OUT";
+        private readonly string ButtonComponentTagState_UNSELECT_ALL = "UNSELECT_ALL";
+
+        private void SetSelectedComponents()
+        {
+            if (buttonComponents.Tag.ToString() == this.ButtonComponentTagState_SELECT_ALL)
+            {
+                listBoxComponents.SelectAll();
+
+                if (this.ValidateWorkSpacePath())
+                {
+                    buttonComponents.Content = "Select Checked Out";
+                    buttonComponents.Tag = this.ButtonComponentTagState_SELECT_CHECKED_OUT;
+                }
+                else
+                {
+                    buttonComponents.Content = "Unselect All";
+                    buttonComponents.Tag = this.ButtonComponentTagState_UNSELECT_ALL;
+                }
+            }
+            else if (buttonComponents.Tag.ToString() == this.ButtonComponentTagState_SELECT_CHECKED_OUT)
+            {
+                if (this.SelectCheckedOutComponents())
+                {
+                    buttonComponents.Content = "Unselect All";
+                    buttonComponents.Tag = this.ButtonComponentTagState_UNSELECT_ALL;
+                }
+                else
+                {
+                    buttonComponents.Content = "Select All";
+                    buttonComponents.Tag = this.ButtonComponentTagState_SELECT_ALL;
+                }
+            }
+            else if (buttonComponents.Tag.ToString() == this.ButtonComponentTagState_UNSELECT_ALL)
+            {
+                listBoxComponents.UnselectAll();
+
+                buttonComponents.Content = "Select All";
+                buttonComponents.Tag = this.ButtonComponentTagState_SELECT_ALL;   
             }
         }
     }

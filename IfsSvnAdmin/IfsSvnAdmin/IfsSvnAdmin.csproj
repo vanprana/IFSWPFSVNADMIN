@@ -16,7 +16,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>E:\SkyDrive\Apps\IFS Wpf Svn Administrator 1.8\</PublishUrl>
+    <PublishUrl>C:\Apps\IFS Wpf Svn Administrator 1.8\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -28,7 +28,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>\\ththlk1\Apps\IFS Wpf Svn Administrator 1.8\</UpdateUrl>
     <ProductName>IFS WPF SVN Manager 1.8</ProductName>
-    <ApplicationRevision>14</ApplicationRevision>
+    <ApplicationRevision>16</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -119,6 +119,9 @@
     <Compile Include="UserControls\UserControlCreateBranchFromTag.xaml.cs">
       <DependentUpon>UserControlCreateBranchFromTag.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlFindStaticComponents.xaml.cs">
+      <DependentUpon>UserControlFindStaticComponents.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlManageTagBranch.xaml.cs">
       <DependentUpon>UserControlManageTagBranch.xaml</DependentUpon>
     </Compile>
@@ -145,6 +148,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\UserControlCreateBranchFromTag.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\UserControlFindStaticComponents.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

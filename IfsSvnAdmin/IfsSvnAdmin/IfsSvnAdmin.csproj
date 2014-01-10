@@ -28,7 +28,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>\\ththlk1\Apps\IFS Wpf Svn Administrator 1.8\</UpdateUrl>
     <ProductName>IFS WPF SVN Manager 1.8</ProductName>
-    <ApplicationRevision>16</ApplicationRevision>
+    <ApplicationRevision>17</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -240,6 +240,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\goto.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\select_all_1616.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\select_row_1616.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\clear_1616.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

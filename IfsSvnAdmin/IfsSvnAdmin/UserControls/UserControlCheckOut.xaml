@@ -9,7 +9,7 @@
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:p="clr-namespace:IfsSvnAdmin.Properties"
              Loaded="UserControl_Loaded">
-    
+
     <Grid Style="{StaticResource ContentRoot}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -24,12 +24,22 @@
         </Grid.ColumnDefinitions>
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <ListBox Name="listBoxProjectList" Margin="3" MinWidth="150" IsTextSearchEnabled="True" SelectionChanged="listBoxProjectList_SelectionChanged" />                
-           
-            <TextBox Grid.Row="1" Height="23" Margin="3" Name="textBoxProjectsFilter" TextChanged="textBoxProjectsFilter_TextChanged" CharacterCasing="Lower" />
+            <TextBlock Text="SVN Project List:" Margin="3" FontWeight="Normal" FontStyle="Normal">
+                <TextBlock.BitmapEffect>
+                   <DropShadowBitmapEffect
+                      ShadowDepth="4"
+                      Direction="330"
+                      Color="Black"
+                      Opacity="0.5"
+                      Softness="0.25" />
+               </TextBlock.BitmapEffect>
+            </TextBlock>
+            <ListBox Grid.Row="1" Name="listBoxProjectList" Margin="3" MinWidth="150" IsTextSearchEnabled="True" SelectionChanged="listBoxProjectList_SelectionChanged" />
+            <TextBox Grid.Row="2" Height="23" Margin="3" Name="textBoxProjectsFilter" TextChanged="textBoxProjectsFilter_TextChanged" CharacterCasing="Lower" ToolTip="Filter Projects" />
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="6" ShowsPreview="True"/>
         <Grid Grid.Column="2">
@@ -37,44 +47,48 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Button Name="buttonComponents" Margin="3" Content="Select All" Click="buttonComponents_Click" Tag="SELECT_ALL" Opacity="1" Height="Auto">                
-            </Button>
-            <ListBox Grid.Row="1" Name="listBoxComponents" Margin="3" MinWidth="150" SelectionMode="Multiple" IsTextSearchEnabled="True" >
-                <!--<ListBox.Triggers>
-                    <EventTrigger RoutedEvent="ListBox.MouseEnter">
-                        <BeginStoryboard>
-                            <Storyboard BeginTime="0:0:0">
-                                <ObjectAnimationUsingKeyFrames
-                                    Storyboard.TargetName="buttonComponents" 
-                                    Storyboard.TargetProperty="Visibility" >
-                                    <DiscreteObjectKeyFrame Value="{x:Static Visibility.Visible}" />
-                                </ObjectAnimationUsingKeyFrames>
-                                <DoubleAnimation 
-                                    Storyboard.TargetName="buttonComponents"
-                                    Storyboard.TargetProperty="Height" 
-                                    From="0" To="30" Duration="0:0:0.5" AutoReverse="False"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                    <EventTrigger RoutedEvent="ListBox.MouseLeave">
-                        <BeginStoryboard>
-                            <Storyboard BeginTime="0:0:0">
-                                <ObjectAnimationUsingKeyFrames
-                                    Storyboard.TargetName="buttonComponents" 
-                                    Storyboard.TargetProperty="Visibility" >
-                                    <DiscreteObjectKeyFrame Value="{x:Static Visibility.Hidden}" />
-                                </ObjectAnimationUsingKeyFrames>
-                                <DoubleAnimation 
-                                    Storyboard.TargetName="buttonComponents"
-                                    Storyboard.TargetProperty="Height" 
-                                    From="30" To="0" Duration="0:0:0.5" AutoReverse="False"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </ListBox.Triggers>-->
-            </ListBox>
-            <TextBox Grid.Row="2" Height="23" Margin="3" Name="textBoxComponentFilter" TextChanged="textBoxComponentFilter_TextChanged" CharacterCasing="Lower" />   
+            <TextBlock Text="Components List:" Margin="3">
+                <TextBlock.BitmapEffect>
+                   <DropShadowBitmapEffect
+                      ShadowDepth="4"
+                      Direction="330"
+                      Color="Black"
+                      Opacity="0.5"
+                      Softness="0.25" />
+               </TextBlock.BitmapEffect>
+            </TextBlock>
+            <ListBox Grid.Row="1" Name="listBoxComponents" Margin="3" MinWidth="150" SelectionMode="Multiple" IsTextSearchEnabled="True" />
+            <Grid Grid.Row="2" Margin="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Name="buttonComponentsSelectAll" Click="buttonComponentsSelectAll_Click" BorderThickness="0" ToolTip="Select All">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal" >
+                            <Image Name="buttonSelectAllImage" Source="/IfsSvnAdmin;component/Resources/select_all_1616.png" Stretch="UniformToFill"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column= "1" Name="buttonComponentsUnselectAll" Click="buttonComponentsUnselectAll_Click" BorderThickness="0" ToolTip="Unselect All">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal" >
+                            <Image Name="buttonUnselectAllImage" Source="/IfsSvnAdmin;component/Resources/clear_1616.png" Stretch="UniformToFill"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column= "2" Name="buttonComponentsSelectCheckedOut" Click="buttonComponentsSelectCheckedOut_Click" BorderThickness="0" ToolTip="Select Only Checked Out">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal" >
+                            <Image Name="buttonSelectCheckedOutImage" Source="/IfsSvnAdmin;component/Resources/select_row_1616.png" Stretch="UniformToFill"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </Grid>
+            <TextBox Grid.Row="3" Height="23" Margin="3" Name="textBoxComponentFilter" TextChanged="textBoxComponentFilter_TextChanged" CharacterCasing="Lower" ToolTip="Filter Components" />
         </Grid>
         <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" Width="6" ShowsPreview="True"/>
         <Grid Grid.Column="4">
@@ -90,28 +104,28 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
+
             <Label Content="SVN Server URI:" Name="label1" Padding="3" Margin="3" />
-            <TextBox Grid.Column="1" Height="23" Name="textBoxServerUri" Text="{Binding Source={x:Static p:Settings.Default}, Path=ServerUri, Mode=TwoWay}" Margin="3"/>           
+            <TextBox Grid.Column="1" Height="23" Name="textBoxServerUri" Text="{Binding Source={x:Static p:Settings.Default}, Path=ServerUri, Mode=TwoWay}" Margin="3"/>
             <Label  Grid.Row="1" Content="Projects Root:" Name="label2" Padding="3" Margin="3"/>
             <TextBox Grid.Row="1" Grid.Column="1" Height="23" Name="textBoxProjectRoot" Text="{Binding Source={x:Static p:Settings.Default}, Path=WorkSpace, Mode=TwoWay}" Margin="3" TextChanged="textBoxProjectRoot_TextChanged" />
-            <Button Grid.Row="1" Grid.Column="2" Name="buttonProjectRoot" Margin="3"  Padding="3" Click="buttonProjectRoot_Click">
+            <Button Grid.Row="1" Grid.Column="2" Name="buttonProjectRoot" Margin="3"  Padding="3" Click="buttonProjectRoot_Click" BorderThickness="0" ToolTip="Select Project Root Folder">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal" >
                         <Image Name="buttonProjectRootImage" Source="/IfsSvnAdmin;component/Resources/opened_folder.png" Stretch="UniformToFill"/>
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Label Grid.Row="2" Content="Work Space:"  Name="label3" Padding="3" Margin="3"/>
+            <Label Grid.Row="2" Content="Workspace:"  Name="label3" Padding="3" Margin="3"/>
             <TextBox Grid.Row="2" Grid.Column="1" Height="23" Name="textBoxWorkSpace" Margin="3" TextChanged="textBoxWorkSpace_TextChanged" />
-            <Button Grid.Row="2" Grid.Column="2" Name="buttonGoToPath" Margin="3"  Padding="3" Click="buttonGoToPath_Click">
+            <Button Grid.Row="2" Grid.Column="2" Name="buttonGoToPath" Margin="3"  Padding="3" Click="buttonGoToPath_Click" BorderThickness="0" ToolTip="Go to Workspace Folder">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal" >
                         <Image Name="buttonGoToPathImage" Source="/IfsSvnAdmin;component/Resources/goto.png" Stretch="UniformToFill"/>
                     </StackPanel>
-                </Button.Content>                
+                </Button.Content>
             </Button>
-            <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="Auto" HorizontalAlignment="Right" Name="buttonCheckOut" Width="100" Margin="3" Click="buttonCheckOut_Click" Padding="3">                
+            <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="Auto" HorizontalAlignment="Right" Name="buttonCheckOut" Width="100" Margin="3" Click="buttonCheckOut_Click" Padding="3">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal" >
                         <Image Name="buttonCheckOotImage" Source="/IfsSvnAdmin;component/Resources/checkout.png" Stretch="UniformToFill"/>

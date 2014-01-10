@@ -357,8 +357,7 @@ namespace IfsSvnAdmin.UserControls
 
                         if (Properties.Settings.Default.SelectCheckedOutAtStartUp)
                         {
-                            buttonComponents.Tag = this.ButtonComponentTagState_SELECT_CHECKED_OUT;
-                            this.SetSelectedComponents();
+                            this.SelectCheckedOutComponents();
                         }
                     }
                 }
@@ -429,8 +428,9 @@ namespace IfsSvnAdmin.UserControls
 
                     Properties.Settings.Default.SelectedProject = seletedProject.Name;
 
-                    buttonComponents.Tag = this.ButtonComponentTagState_UNSELECT_ALL;
-                    this.SetSelectedComponents();
+                    listBoxComponents.SelectedItem = null;
+                    listBoxComponents.SelectedItems.Clear();
+                    listBoxComponents.UnselectAll();
                 }
             }
             catch (Exception ex)
@@ -458,8 +458,7 @@ namespace IfsSvnAdmin.UserControls
 
                 listBoxComponents.SelectedItem = null;
                 listBoxComponents.SelectedItems.Clear();
-                buttonComponents.Tag = this.ButtonComponentTagState_UNSELECT_ALL;
-                this.SetSelectedComponents();
+                listBoxComponents.UnselectAll();
             }
             catch (Exception)
             {
@@ -605,58 +604,37 @@ namespace IfsSvnAdmin.UserControls
                 ModernDialog.ShowMessage(ex.Message, "Error selecting Project-Root folder", MessageBoxButton.OK);
             }
         }
-
-        private void buttonComponents_Click(object sender, RoutedEventArgs e)
+               
+        private void buttonComponentsSelectAll_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                this.SetSelectedComponents();
+                listBoxComponents.SelectAll();
             }
             catch (Exception)
             {
             }
         }
 
-        private readonly string ButtonComponentTagState_SELECT_ALL = "SELECT_ALL";
-        private readonly string ButtonComponentTagState_SELECT_CHECKED_OUT = "SELECT_CHECKED_OUT";
-        private readonly string ButtonComponentTagState_UNSELECT_ALL = "UNSELECT_ALL";
-
-        private void SetSelectedComponents()
+        private void buttonComponentsUnselectAll_Click(object sender, RoutedEventArgs e)
         {
-            if (buttonComponents.Tag.ToString() == this.ButtonComponentTagState_SELECT_ALL)
-            {
-                listBoxComponents.SelectAll();
-
-                if (this.ValidateWorkSpacePath())
-                {
-                    buttonComponents.Content = "Select Checked Out";
-                    buttonComponents.Tag = this.ButtonComponentTagState_SELECT_CHECKED_OUT;
-                }
-                else
-                {
-                    buttonComponents.Content = "Unselect All";
-                    buttonComponents.Tag = this.ButtonComponentTagState_UNSELECT_ALL;
-                }
-            }
-            else if (buttonComponents.Tag.ToString() == this.ButtonComponentTagState_SELECT_CHECKED_OUT)
-            {
-                if (this.SelectCheckedOutComponents())
-                {
-                    buttonComponents.Content = "Unselect All";
-                    buttonComponents.Tag = this.ButtonComponentTagState_UNSELECT_ALL;
-                }
-                else
-                {
-                    buttonComponents.Content = "Select All";
-                    buttonComponents.Tag = this.ButtonComponentTagState_SELECT_ALL;
-                }
-            }
-            else if (buttonComponents.Tag.ToString() == this.ButtonComponentTagState_UNSELECT_ALL)
+            try
             {
                 listBoxComponents.UnselectAll();
+            }
+            catch (Exception)
+            {
+            }
+        }
 
-                buttonComponents.Content = "Select All";
-                buttonComponents.Tag = this.ButtonComponentTagState_SELECT_ALL;   
+        private void buttonComponentsSelectCheckedOut_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                this.SelectCheckedOutComponents();
+            }
+            catch (Exception)
+            {
             }
         }
     }

@@ -81,6 +81,13 @@ namespace IfsSvnAdmin.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap clear_1616 {
+            get {
+                object obj = ResourceManager.GetObject("clear_1616", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap folder {
             get {
                 object obj = ResourceManager.GetObject("folder", resourceCulture);
@@ -98,6 +105,20 @@ namespace IfsSvnAdmin.Properties {
         internal static System.Drawing.Bitmap project {
             get {
                 object obj = ResourceManager.GetObject("project", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap select_all_1616 {
+            get {
+                object obj = ResourceManager.GetObject("select_all_1616", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap select_row_1616 {
+            get {
+                object obj = ResourceManager.GetObject("select_row_1616", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

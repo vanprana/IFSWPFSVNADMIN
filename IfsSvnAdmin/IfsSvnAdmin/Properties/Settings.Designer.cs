@@ -26,12 +26,12 @@ namespace IfsSvnAdmin.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("C:\\SvnCheckOut")]
-        public string WorkSpace {
+        public string ProjectRoot {
             get {
-                return ((string)(this["WorkSpace"]));
+                return ((string)(this["ProjectRoot"]));
             }
             set {
-                this["WorkSpace"] = value;
+                this["ProjectRoot"] = value;
             }
         }
         

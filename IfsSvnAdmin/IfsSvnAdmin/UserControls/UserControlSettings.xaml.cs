@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using IfsSvnAdmin.Classes;
 using FirstFloor.ModernUI.Windows.Controls;
+using System.Deployment.Application;
 
 namespace IfsSvnAdmin.UserControls
 {
@@ -67,6 +68,13 @@ namespace IfsSvnAdmin.UserControls
             try
             {
                 myNotifierLync = new NotifierLync();
+
+                if (ApplicationDeployment.IsNetworkDeployed)
+                {
+                    Version ProductVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion;
+
+                    textBoxPublishVersion.Text = ProductVersion.ToString();
+                }
             }
             catch (Exception)
             {

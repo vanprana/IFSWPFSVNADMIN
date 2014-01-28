@@ -31,6 +31,7 @@ namespace IfsSvnAdmin.UserControls
         private bool _cancelCheckout = false;
         private readonly SvnUriTarget projectsUri = new SvnUriTarget(Properties.Settings.Default.ServerUri + "/projects");
         private delegate void client_NotifyDelegate(object sender, SvnNotifyEventArgs e);
+        private delegate void logDelegate(string message);
 
         private BitmapImage projectImage;
         private BitmapImage componentImage;
@@ -195,15 +196,20 @@ namespace IfsSvnAdmin.UserControls
 
                 Uri rootUri = client.GetRepositoryRoot(arg.ProjectWorkspaceUri);
 
+                this.Log("Starting Checking Out at " + DateTime.Now.ToString());
 
                 client.CheckOut(arg.ProjectNbprojectUri, arg.CheckOutPathNbproject, new SvnCheckOutArgs() { ThrowOnError = false, IgnoreExternals = true });
 
                 client.CheckOut(arg.ProjectWorkspaceUri, arg.CheckOutPathWorkspace, new SvnCheckOutArgs() { IgnoreExternals = true });
 
+                this.Log("Starting Component Checking Out at " + DateTime.Now.ToString());
+
                 Uri componentUri;
                 foreach (SvnComponent component in arg.CompornentArray)
                 {
                     componentUri = new Uri(component.Path.Replace("^/", rootUri.AbsoluteUri));
+
+                    this.Log("Component: " + component.Name);
 
                     client.CheckOut(componentUri, arg.CheckOutPathWorkspace + @"\" + component.Name);
                 }
@@ -214,19 +220,53 @@ namespace IfsSvnAdmin.UserControls
         {
             try
             {
-                if (textBoxLog.Dispatcher.CheckAccess())
+                if (MyScrollViewer.Dispatcher.CheckAccess())
                 {
-                    textBoxLog.AppendText(DateTime.Now.ToString() + " " + e.Action + " " + e.FullPath + "\r\n");
-                    textBoxLog.ScrollToEnd();
+                    if (e.Error != null)
+                    {
+                        textBlockLog.Inlines.Add(new Run(e.Error.Message + "\r\n"));
+                    }
+                    else
+                    {
+                        textBlockLog.Inlines.Add(new Italic(new Run(e.Action.ToString())) { Foreground = Brushes.Gray });
+                        if (e.Action == SvnNotifyAction.UpdateCompleted)
+                        {
+                            textBlockLog.Inlines.Add(new Run(" " + e.Path));
+                        }
+                        else
+                        {
+                            textBlockLog.Inlines.Add(new Run(" \t" + e.Path));
+                        }
+                        textBlockLog.Inlines.Add(new LineBreak());
+                    }
+                    MyScrollViewer.ScrollToEnd();
                 }
                 else
                 {
-                    textBoxLog.Dispatcher.Invoke(new client_NotifyDelegate(client_Notify), new object[] { sender, e });
+                    MyScrollViewer.Dispatcher.Invoke(new client_NotifyDelegate(client_Notify), new object[] { sender, e });
                 }
             }
             catch (Exception)
             {
+            }
+        }
 
+        private void Log(string message)
+        {
+            try
+            {
+                if (MyScrollViewer.Dispatcher.CheckAccess())
+                {
+                    textBlockLog.Inlines.Add(new Bold(new Run(message + "\r\n")));
+                    MyScrollViewer.ScrollToEnd();
+                }
+                else
+                {
+                    MyScrollViewer.Dispatcher.Invoke(new logDelegate(Log), new object[] { message });
+                }
+            }
+            catch (Exception)
+            {
             }
         }
 
@@ -362,8 +402,7 @@ namespace IfsSvnAdmin.UserControls
                     }
                 }
                 this.ButtonState = ButtonState.CheckOut;
-                textBoxLog.AppendText("Done!\r\n");
-
+                this.Log("Done!");
             }
             catch (Exception ex)
             {
@@ -597,6 +636,7 @@ namespace IfsSvnAdmin.UserControls
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
                     textBoxProjectRoot.Text = dialog.SelectedPath;
+                    Properties.Settings.Default.ProjectRoot = textBoxProjectRoot.Text;
                 }
             }
             catch (Exception ex)
@@ -604,7 +644,7 @@ namespace IfsSvnAdmin.UserControls
                 ModernDialog.ShowMessage(ex.Message, "Error selecting Project-Root folder", MessageBoxButton.OK);
             }
         }
-               
+
         private void buttonComponentsSelectAll_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -632,6 +672,18 @@ namespace IfsSvnAdmin.UserControls
             try
             {
                 this.SelectCheckedOutComponents();
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void buttonClearLog_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                //textBoxLog.Clear();
+                textBlockLog.Inlines.Clear();
             }
             catch (Exception)
             {

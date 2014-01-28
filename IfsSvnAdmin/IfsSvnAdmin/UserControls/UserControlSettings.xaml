@@ -4,20 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="329" 
-             d:DesignWidth="480" 
+             d:DesignHeight="415" 
+             d:DesignWidth="704" 
              Loaded="UserControl_Loaded" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:p="clr-namespace:IfsSvnAdmin.Properties">
     <Grid Style="{StaticResource ContentRoot}">
         <Button Content="Reset Settings" Height="30" HorizontalAlignment="Left" Margin="12,12,0,0" Name="button1" VerticalAlignment="Top" Width="140" Click="button1_Click" >
             <Button.Effect>
-                <DropShadowEffect></DropShadowEffect>
+                <DropShadowEffect ShadowDepth="0"></DropShadowEffect>
             </Button.Effect>
         </Button>
         <Button Content="Contact Support" Height="30" HorizontalAlignment="Left" Margin="12,48,0,0" Name="buttonContactSupport" VerticalAlignment="Top" Width="140" Click="buttonContactSupport_Click" >
             <Button.Effect>
-                <DropShadowEffect></DropShadowEffect>
+                <DropShadowEffect ShadowDepth="0"></DropShadowEffect>
             </Button.Effect>
         </Button>
         <GroupBox Header="In CheckOut Window" Height="100" HorizontalAlignment="Left" Margin="12,96,0,0" Name="groupBoxCheckOutWindow" VerticalAlignment="Top" Width="332">           
@@ -26,5 +26,7 @@
                 <CheckBox Content="Select CheckedOut Components At StartUp" Height="20" HorizontalAlignment="Left" Margin="6,32,0,0" Name="checkBoxSelectCheckedOutAtStartUp" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=SelectCheckedOutAtStartUp, Mode=TwoWay}"/>
             </Grid>
         </GroupBox>
+        <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,202,0,0" Name="textBlock1" Text="Publish Version:" VerticalAlignment="Top" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="112,202,0,0" Name="textBoxPublishVersion" VerticalAlignment="Top" Width="232" IsReadOnly="True" />
     </Grid>
 </UserControl>

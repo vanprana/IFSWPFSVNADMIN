@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="IfsSvnAdmin.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="WorkSpace" Type="System.String" Scope="User">
+    <Setting Name="ProjectRoot" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\SvnCheckOut</Value>
     </Setting>
     <Setting Name="ServerWorkSpace" Type="System.String" Scope="User">

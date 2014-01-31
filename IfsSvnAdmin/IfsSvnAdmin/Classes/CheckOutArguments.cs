@@ -11,18 +11,20 @@ namespace IfsSvnAdmin.Classes
         internal SvnComponent[] CompornentArray { get; set; }
         internal string CheckOutPathProject { get; set; }
         internal string CheckOutPathNbproject { get; set; }
-        internal string CheckOutPathWorkspace { get; private set; }      
+        internal string CheckOutPathWorkspace { get; private set; }
         internal Uri ProjectNbprojectUri { get; private set; }
         internal Uri ProjectWorkspaceUri { get; private set; }
+        internal bool ShowLessLogInformation { get; private set; }
 
         internal CheckOutArguments(JobType type)
         {
             this.Type = type;
         }
 
-        internal CheckOutArguments(JobType type, string projectPath, string checkOutPathProject, SvnComponent[] componentArray)
+        internal CheckOutArguments(JobType type, bool showLessLogInformation, string projectPath, string checkOutPathProject, SvnComponent[] componentArray)
         {
-            this.Type = type;                               
+            this.Type = type;
+            this.ShowLessLogInformation = showLessLogInformation;
             this.CheckOutPathProject = checkOutPathProject;
 
             this.ProjectNbprojectUri = new Uri(projectPath + Properties.Settings.Default.ServerNbProject);

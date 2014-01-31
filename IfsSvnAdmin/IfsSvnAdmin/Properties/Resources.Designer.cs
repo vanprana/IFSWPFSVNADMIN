@@ -88,6 +88,13 @@ namespace IfsSvnAdmin.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap copy_1616 {
+            get {
+                object obj = ResourceManager.GetObject("copy_1616", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap folder {
             get {
                 object obj = ResourceManager.GetObject("folder", resourceCulture);

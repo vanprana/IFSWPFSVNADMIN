@@ -31,7 +31,7 @@ namespace IfsSvnAdmin.UserControls
         private bool _cancelCheckout = false;
         private readonly SvnUriTarget projectsUri = new SvnUriTarget(Properties.Settings.Default.ServerUri + "/projects");
         private delegate void client_NotifyDelegate(object sender, SvnNotifyEventArgs e);
-        private delegate void logDelegate(string message);
+        private delegate void logDelegate(string message, bool showLessLogInformation);
 
         private BitmapImage projectImage;
         private BitmapImage componentImage;
@@ -169,8 +169,9 @@ namespace IfsSvnAdmin.UserControls
                                 checkOutPathProject += (seletedNode.Tag as SvnProject).Name + @"\";
                             }
                         }
-
+                        Mouse.OverrideCursor = Cursors.Wait;
                         backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(JobType.CheckOut,
+                                                                                      checkBoxShowLessInfor.IsChecked.Value,
                                                                                       projectPath,
                                                                                       checkOutPathProject,
                                                                                       compornentArray));
@@ -191,25 +192,28 @@ namespace IfsSvnAdmin.UserControls
                 SvnUIBindArgs bindArgs = new SvnUIBindArgs();
                 SvnUI.Bind(client, bindArgs);
 
-                client.Notify += new EventHandler<SvnNotifyEventArgs>(client_Notify);
+                if (arg.ShowLessLogInformation == false)
+                {
+                    client.Notify += new EventHandler<SvnNotifyEventArgs>(client_Notify);
+                }
                 client.Cancel += new EventHandler<SvnCancelEventArgs>(client_Cancel);
 
                 Uri rootUri = client.GetRepositoryRoot(arg.ProjectWorkspaceUri);
 
-                this.Log("Starting Checking Out at " + DateTime.Now.ToString());
+                this.Log("Starting Checking Out at " + DateTime.Now.ToString(), arg.ShowLessLogInformation);
 
                 client.CheckOut(arg.ProjectNbprojectUri, arg.CheckOutPathNbproject, new SvnCheckOutArgs() { ThrowOnError = false, IgnoreExternals = true });
 
                 client.CheckOut(arg.ProjectWorkspaceUri, arg.CheckOutPathWorkspace, new SvnCheckOutArgs() { IgnoreExternals = true });
 
-                this.Log("Starting Component Checking Out at " + DateTime.Now.ToString());
+                this.Log("Starting Component Checking Out at " + DateTime.Now.ToString(), arg.ShowLessLogInformation);
 
                 Uri componentUri;
                 foreach (SvnComponent component in arg.CompornentArray)
                 {
                     componentUri = new Uri(component.Path.Replace("^/", rootUri.AbsoluteUri));
 
-                    this.Log("Component: " + component.Name);
+                    this.Log("Component: " + component.Name, arg.ShowLessLogInformation);
 
                     client.CheckOut(componentUri, arg.CheckOutPathWorkspace + @"\" + component.Name);
                 }
@@ -251,18 +255,25 @@ namespace IfsSvnAdmin.UserControls
             }
         }
 
-        private void Log(string message)
+        private void Log(string message, bool showLessLogInformation)
         {
             try
             {
                 if (MyScrollViewer.Dispatcher.CheckAccess())
                 {
-                    textBlockLog.Inlines.Add(new Bold(new Run(message + "\r\n")));
+                    if (showLessLogInformation)
+                    {
+                        textBlockLog.Inlines.Add(new Run(message + "\r\n"));
+                    }
+                    else
+                    {
+                        textBlockLog.Inlines.Add(new Bold(new Run(message + "\r\n")));
+                    }
                     MyScrollViewer.ScrollToEnd();
                 }
                 else
                 {
-                    MyScrollViewer.Dispatcher.Invoke(new logDelegate(Log), new object[] { message });
+                    MyScrollViewer.Dispatcher.Invoke(new logDelegate(Log), new object[] { message, showLessLogInformation });
                 }
             }
             catch (Exception)
@@ -402,7 +413,7 @@ namespace IfsSvnAdmin.UserControls
                     }
                 }
                 this.ButtonState = ButtonState.CheckOut;
-                this.Log("Done!");
+                this.Log("Done!", checkBoxShowLessInfor.IsChecked.Value);
             }
             catch (Exception ex)
             {
@@ -412,6 +423,7 @@ namespace IfsSvnAdmin.UserControls
             {
                 progressBarMain.Visibility = System.Windows.Visibility.Hidden;
                 this._cancelCheckout = false;
+                Mouse.OverrideCursor = null;
             }
         }
 
@@ -684,6 +696,22 @@ namespace IfsSvnAdmin.UserControls
             {
                 //textBoxLog.Clear();
                 textBlockLog.Inlines.Clear();
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void buttonCopyLog_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(textBlockLog.Text) == false)
+                {
+                    Clipboard.SetText(textBlockLog.Text);
+
+                    ModernDialog.ShowMessage("Log copied to clipboard", "Log Copied", MessageBoxButton.OK);
+                }
             }
             catch (Exception)
             {

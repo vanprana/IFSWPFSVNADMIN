@@ -18,7 +18,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>C:\Apps\IFS Wpf Svn Administrator 1.8\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
+    <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
@@ -26,10 +26,11 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>\\ththlk1\Apps\IFS Wpf Svn Administrator 1.8\</InstallUrl>
     <UpdateUrl>\\ththlk1\Apps\IFS Wpf Svn Administrator 1.8\</UpdateUrl>
     <TargetCulture>en</TargetCulture>
     <ProductName>IFS SVN Manager</ProductName>
-    <ApplicationRevision>21</ApplicationRevision>
+    <ApplicationRevision>24</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -254,6 +255,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\clear_1616.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\copy_1616.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

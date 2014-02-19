@@ -9,8 +9,8 @@
             <!-- end of workaround -->
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.xaml" />
-                <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.Light.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Assets/ModernUI.MyTheme.xaml"/>                
+            </ResourceDictionary.MergedDictionaries>            
         </ResourceDictionary>
         
     </Application.Resources>

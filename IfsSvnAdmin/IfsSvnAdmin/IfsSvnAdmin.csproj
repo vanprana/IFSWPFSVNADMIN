@@ -30,7 +30,7 @@
     <UpdateUrl>\\ththlk1\Apps\IFS Wpf Svn Administrator 1.8\</UpdateUrl>
     <TargetCulture>en</TargetCulture>
     <ProductName>IFS SVN Manager</ProductName>
-    <ApplicationRevision>27</ApplicationRevision>
+    <ApplicationRevision>28</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -137,6 +137,10 @@
     <Compile Include="UserControls\UserControlSettings.xaml.cs">
       <DependentUpon>UserControlSettings.xaml</DependentUpon>
     </Compile>
+    <Page Include="Assets\ModernUI.MyTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

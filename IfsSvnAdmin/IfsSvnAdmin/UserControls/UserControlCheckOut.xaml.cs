@@ -205,6 +205,7 @@ namespace IfsSvnAdmin.UserControls
                 client.CheckOut(arg.ProjectNbprojectUri, arg.CheckOutPathNbproject, new SvnCheckOutArgs() { ThrowOnError = false, IgnoreExternals = true });
 
                 client.CheckOut(arg.ProjectWorkspaceUri, arg.CheckOutPathWorkspace, new SvnCheckOutArgs() { IgnoreExternals = true });
+                client.CheckOut(arg.ProjectDocumentUri, arg.CheckOutPathDocument, new SvnCheckOutArgs() { IgnoreExternals = true });
 
                 this.Log("Starting Component Checking Out at " + DateTime.Now.ToString(), arg.ShowLessLogInformation);
 
@@ -215,7 +216,14 @@ namespace IfsSvnAdmin.UserControls
 
                     this.Log("Component: " + component.Name, arg.ShowLessLogInformation);
 
-                    client.CheckOut(componentUri, arg.CheckOutPathWorkspace + @"\" + component.Name);
+                    if (component.Type == SvnComponent.SvnComponentType.Work)
+                    {
+                        client.CheckOut(componentUri, arg.CheckOutPathWorkspace + @"\" + component.Name);
+                    }
+                    else if(component.Type == SvnComponent.SvnComponentType.Document)
+                    {
+                        client.CheckOut(componentUri, arg.CheckOutPathDocument + @"\" + component.Name);
+                    }
                 }
             }
         }
@@ -439,6 +447,7 @@ namespace IfsSvnAdmin.UserControls
                 {
                     SvnProject seletedProject = seletedNode.Tag as SvnProject;
                     List<SvnComponent> componentList = myIfsSvn.GetComponentListFromExternals(seletedProject);
+                    componentList.AddRange(myIfsSvn.GetDocumentComponentListFromExternals(seletedProject));
 
                     StackPanel treeItemStack;
                     TextBlock lbl;

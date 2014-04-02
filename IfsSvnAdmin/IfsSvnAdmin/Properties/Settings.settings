@@ -41,5 +41,8 @@
     <Setting Name="TextBoxComponentFilter_text" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="ServerDocumentation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">documentation</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

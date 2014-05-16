@@ -18,6 +18,7 @@ using SharpSvn.UI;
 using System.Collections.ObjectModel;
 using FirstFloor.ModernUI.Windows.Controls;
 using System.IO;
+using NLog;
 
 namespace IfsSvnClient.UserControls
 {
@@ -26,6 +27,8 @@ namespace IfsSvnClient.UserControls
     /// </summary>
     public partial class UserControlCheckOut : UserControl
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private BackgroundWorker backgroundWorkerCheckOut;
         private delegate void backgroundWorkerCheckOut_RunWorkerCompletedDelegate(object sender, RunWorkerCompletedEventArgs e);
         private bool _cancelCheckout = false;
@@ -534,13 +537,18 @@ namespace IfsSvnClient.UserControls
         private void textBoxProjectsFilter_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
-            {
+            {                
                 listBoxProjectList.Items.Filter = ListBoxProjectsFilter;
+
+                if (Properties.Settings.Default.TextBoxProjectsFilter_text != textBoxProjectsFilter.Text)
+                {
+                    logger.Info("textBoxProjectsFilter: {0}", textBoxProjectsFilter.Text);
+                }
 
                 if (Properties.Settings.Default.RememberFiltering)
                 {
                     Properties.Settings.Default.TextBoxProjectsFilter_text = textBoxProjectsFilter.Text;
-                }
+                }                                
             }
             catch (Exception)
             {

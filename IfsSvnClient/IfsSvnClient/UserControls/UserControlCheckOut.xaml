@@ -1,0 +1,186 @@
+﻿<UserControl x:Class="IfsSvnClient.UserControls.UserControlCheckOut"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="492" 
+             d:DesignWidth="800" 
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:p="clr-namespace:IfsSvnClient.Properties"
+             Loaded="UserControl_Loaded">
+
+    <Grid Style="{StaticResource ContentRoot}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" MinWidth="150"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="1*" MinWidth="150"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="SVN Project List:" Margin="3" FontWeight="Normal" FontStyle="Normal">
+                <TextBlock.BitmapEffect>
+                   <DropShadowBitmapEffect
+                      ShadowDepth="0"
+                      Direction="330"
+                      Color="Black"
+                      Opacity="0.5"
+                      Softness="0.25" />
+               </TextBlock.BitmapEffect>
+            </TextBlock>
+            <ListBox Grid.Row="1" Name="listBoxProjectList" Margin="3" MinWidth="150" IsTextSearchEnabled="True" SelectionChanged="listBoxProjectList_SelectionChanged" BorderThickness="1" ClipToBounds="False" />
+            <TextBox Grid.Row="2" Height="23" Margin="3,3,3,0" Name="textBoxProjectsFilter" TextChanged="textBoxProjectsFilter_TextChanged" CharacterCasing="Lower" ToolTip="Filter Projects" />
+        </Grid>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="6" ShowsPreview="True"/>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Components List:" Margin="3">
+                <TextBlock.BitmapEffect>
+                   <DropShadowBitmapEffect
+                      ShadowDepth="0"
+                      Direction="330"
+                      Color="Black"
+                      Opacity="0.5"
+                      Softness="0.25" />
+               </TextBlock.BitmapEffect>
+            </TextBlock>
+            <ListBox Grid.Row="1" Name="listBoxComponents" Margin="3" MinWidth="150" SelectionMode="Multiple" IsTextSearchEnabled="True" />
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Name="buttonComponentsSelectAll" Click="buttonComponentsSelectAll_Click" ToolTip="Select All" Padding="3" Margin="3">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal" >
+                            <Image Name="buttonSelectAllImage" Source="/IfsSvnClient;component/Resources/select_all_1616.png" Stretch="UniformToFill"/>
+                        </StackPanel>
+                    </Button.Content>
+                    <Button.Effect>
+                        <DropShadowEffect ShadowDepth="0" Opacity="0.5"></DropShadowEffect>
+                    </Button.Effect>
+                </Button>
+                <Button Grid.Column= "1" Name="buttonComponentsUnselectAll" Click="buttonComponentsUnselectAll_Click" ToolTip="Unselect All" Padding="3" Margin="3">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal" >
+                            <Image Name="buttonUnselectAllImage" Source="/IfsSvnClient;component/Resources/clear_1616.png" Stretch="UniformToFill"/>
+                        </StackPanel>
+                    </Button.Content>
+                    <Button.Effect>
+                        <DropShadowEffect ShadowDepth="0" Opacity="0.5"></DropShadowEffect>
+                    </Button.Effect>
+                </Button>
+                <Button Grid.Column= "2" Name="buttonComponentsSelectCheckedOut" Click="buttonComponentsSelectCheckedOut_Click" ToolTip="Select Only Checked Out" Padding="3" Margin="3">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal" >
+                            <Image Name="buttonSelectCheckedOutImage" Source="/IfsSvnClient;component/Resources/select_row_1616.png" Stretch="UniformToFill"/>
+                        </StackPanel>
+                    </Button.Content>
+                    <Button.Effect>
+                        <DropShadowEffect ShadowDepth="0" Opacity="0.5"></DropShadowEffect>
+                    </Button.Effect>
+                </Button>
+            </Grid>
+            <TextBox Grid.Row="3" Height="23" Margin="3,3,3,0" Name="textBoxComponentFilter" TextChanged="textBoxComponentFilter_TextChanged" CharacterCasing="Lower" ToolTip="Filter Components" />
+        </Grid>
+        <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" Width="6" ShowsPreview="True"/>
+        <Grid Grid.Column="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Label Content="SVN Server URI:" Name="label1" Padding="3" Margin="3" />
+            <TextBox Grid.Column="1" Height="23" Name="textBoxServerUri" Text="{Binding Source={x:Static p:Settings.Default}, Path=ServerUri, Mode=TwoWay}" Margin="3,3,0,3"/>
+            <Label  Grid.Row="1" Content="Projects Root:" Name="label2" Padding="3" Margin="3"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Height="23" Name="textBoxProjectRoot" Text="{Binding Source={x:Static p:Settings.Default}, Path=ProjectRoot, Mode=TwoWay}" Margin="3,3,0,3" TextChanged="textBoxProjectRoot_TextChanged" />
+            <Button Grid.Row="1" Grid.Column="2" Name="buttonProjectRoot" Click="buttonProjectRoot_Click" BorderThickness="0" ToolTip="Select Project Root Folder" Padding="3" Margin="3">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Name="buttonProjectRootImage" Source="/IfsSvnClient;component/Resources/opened_folder.png" Stretch="UniformToFill"/>
+                    </StackPanel>
+                </Button.Content>
+                <Button.Effect>
+                    <DropShadowEffect ShadowDepth="0" Opacity="0.5"></DropShadowEffect>
+                </Button.Effect>
+            </Button>
+            <Label Grid.Row="2" Content="Workspace:"  Name="label3" Padding="3" Margin="3"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Height="23" Name="textBoxWorkSpace" Margin="3,3,0,3" TextChanged="textBoxWorkSpace_TextChanged" />
+            <Button Grid.Row="2" Grid.Column="2" Name="buttonGoToPath" Click="buttonGoToPath_Click" BorderThickness="0" ToolTip="Go to Workspace Folder" Padding="3" Margin="3">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Name="buttonGoToPathImage" Source="/IfsSvnClient;component/Resources/goto.png" Stretch="UniformToFill"/>
+                    </StackPanel>
+                </Button.Content>
+                <Button.Effect>
+                    <DropShadowEffect ShadowDepth="0" Opacity="0.5"></DropShadowEffect>
+                </Button.Effect>
+            </Button>
+            <Button Grid.Row="3" Grid.Column="1" Height="Auto" HorizontalAlignment="Right" Name="buttonCheckOut" Width="100" Margin="3,3,0,3" Click="buttonCheckOut_Click" Padding="3">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Name="buttonCheckOotImage" Source="/IfsSvnClient;component/Resources/checkout.png" Stretch="UniformToFill"/>
+                        <Label Name="buttonLabel" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Check Out" Padding="3" />
+                    </StackPanel>
+                </Button.Content>
+                <Button.Effect>
+                    <DropShadowEffect ShadowDepth="0" Opacity="0.5"></DropShadowEffect>
+                </Button.Effect>
+            </Button>
+            <!--<TextBox Grid.Row="4" Grid.ColumnSpan="2" Grid.RowSpan="2" Name="textBoxLog" Margin="3" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True" AllowDrop="False" IsTabStop="False" IsUndoEnabled="False" UseLayoutRounding="True" />-->
+            <Border Grid.Row="4" Grid.ColumnSpan="2" Grid.RowSpan="3" BorderThickness="1" BorderBrush="#FFCCCCCC" Margin="3,3,0,0">
+               <ScrollViewer Name="MyScrollViewer" SnapsToDevicePixels="True" BorderThickness="1" ClipToBounds="False">
+                  <TextBlock Name="textBlockLog" AllowDrop="False" TextWrapping="NoWrap"/>                
+               </ScrollViewer>
+            </Border>           
+            <Button Grid.Row="4" Grid.Column= "2"  Margin="3" Name="buttonClearLog" ToolTip="Clear Log" Padding="3" Click="buttonClearLog_Click">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Name="buttonClearLogImage" Source="/IfsSvnClient;component/Resources/clear_1616.png" Stretch="UniformToFill"/>
+                    </StackPanel>
+                </Button.Content>
+                <Button.Effect>
+                    <DropShadowEffect ShadowDepth="0" Opacity="0.5"></DropShadowEffect>
+                </Button.Effect>
+            </Button>
+            <CheckBox Content="Show Less Information in Log" Grid.Column="0" Grid.Row="3" Margin="3" HorizontalAlignment="Left" Name="checkBoxShowLessInfor" VerticalAlignment="Bottom" IsChecked="True" Grid.ColumnSpan="2" />
+            <Button Grid.Row="5" Grid.Column= "2"  Margin="3" Name="buttonCopyLog" ToolTip="Copy Log" Padding="3" Click="buttonCopyLog_Click">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Name="buttonCopyLogImage" Source="/IfsSvnClient;component/Resources/copy_1616.png" Stretch="UniformToFill"/>
+                    </StackPanel>
+                </Button.Content>
+                <Button.Effect>
+                    <DropShadowEffect ShadowDepth="0" Opacity="0.5"></DropShadowEffect>
+                </Button.Effect>
+            </Button>
+        </Grid>
+        <ProgressBar Grid.Row="1" Grid.ColumnSpan="5" Name="progressBarMain" IsIndeterminate="True" Visibility="Hidden" Height="Auto" Margin="3" />
+    </Grid>
+</UserControl>

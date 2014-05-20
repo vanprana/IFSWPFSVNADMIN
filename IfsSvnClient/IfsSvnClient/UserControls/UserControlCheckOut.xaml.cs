@@ -89,6 +89,7 @@ namespace IfsSvnClient.UserControls
             catch (Exception ex)
             {
                 ModernDialog.ShowMessage(ex.Message, "Error Loading Page", MessageBoxButton.OK);
+                logger.ErrorException("Error Loading Page", ex);
             }
         }
 
@@ -132,15 +133,20 @@ namespace IfsSvnClient.UserControls
                 if (this.ButtonState == ButtonState.CheckOut)
                 {
                     this.StartCheckOut();
+
+                    logger.Info("buttonCheckOut: checkout, Show Less Log information {1}", checkBoxShowLessInfor.IsChecked);
                 }
                 else if (this.ButtonState == ButtonState.Cancel)
                 {
                     this._cancelCheckout = true;
+
+                    logger.Info("buttonCheckOut: Cancel");
                 }
             }
             catch (Exception ex)
             {
                 ModernDialog.ShowMessage(ex.Message, "Error Checking out Components", MessageBoxButton.OK);
+                logger.ErrorException("Error Checking out Components", ex);
             }
         }
 
@@ -223,7 +229,7 @@ namespace IfsSvnClient.UserControls
                     {
                         client.CheckOut(componentUri, arg.CheckOutPathWorkspace + @"\" + component.Name);
                     }
-                    else if(component.Type == SvnComponent.SvnComponentType.Document)
+                    else if (component.Type == SvnComponent.SvnComponentType.Document)
                     {
                         client.CheckOut(componentUri, arg.CheckOutPathDocument + @"\" + component.Name);
                     }
@@ -354,6 +360,7 @@ namespace IfsSvnClient.UserControls
                 if (e.Error != null)
                 {
                     ModernDialog.ShowMessage(e.Error.Message, "Error Checking out Components", MessageBoxButton.OK);
+                    logger.ErrorException("Error Checking out Components", e.Error);
                 }
                 else
                 {
@@ -499,6 +506,7 @@ namespace IfsSvnClient.UserControls
             catch (Exception ex)
             {
                 ModernDialog.ShowMessage(ex.Message, "Error Loading Components", MessageBoxButton.OK);
+                logger.ErrorException("Error Loading Components", ex);
             }
         }
 
@@ -513,6 +521,11 @@ namespace IfsSvnClient.UserControls
             try
             {
                 listBoxComponents.Items.Filter = ListBoxComponentsFilter;
+
+                if (Properties.Settings.Default.TextBoxComponentFilter_text != textBoxComponentFilter.Text)
+                {
+                    logger.Info("textBoxComponentFilter: {0}", textBoxComponentFilter.Text);
+                }
 
                 if (Properties.Settings.Default.RememberFiltering)
                 {
@@ -537,7 +550,7 @@ namespace IfsSvnClient.UserControls
         private void textBoxProjectsFilter_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
-            {                
+            {
                 listBoxProjectList.Items.Filter = ListBoxProjectsFilter;
 
                 if (Properties.Settings.Default.TextBoxProjectsFilter_text != textBoxProjectsFilter.Text)
@@ -548,7 +561,7 @@ namespace IfsSvnClient.UserControls
                 if (Properties.Settings.Default.RememberFiltering)
                 {
                     Properties.Settings.Default.TextBoxProjectsFilter_text = textBoxProjectsFilter.Text;
-                }                                
+                }
             }
             catch (Exception)
             {
@@ -619,11 +632,14 @@ namespace IfsSvnClient.UserControls
         {
             try
             {
+                logger.Info("buttonGoToPath: {0}", textBoxWorkSpace.Text);
+
                 System.Diagnostics.Process.Start("explorer", textBoxWorkSpace.Text);
             }
             catch (Exception ex)
             {
                 ModernDialog.ShowMessage(ex.Message, "Error navigation to folder path", MessageBoxButton.OK);
+                logger.ErrorException("Error navigation to folder path", ex);
             }
         }
 
@@ -667,10 +683,13 @@ namespace IfsSvnClient.UserControls
                     textBoxProjectRoot.Text = dialog.SelectedPath;
                     Properties.Settings.Default.ProjectRoot = textBoxProjectRoot.Text;
                 }
+
+                logger.Info("buttonProjectRoot: {0}", textBoxProjectRoot.Text);
             }
             catch (Exception ex)
             {
                 ModernDialog.ShowMessage(ex.Message, "Error selecting Project-Root folder", MessageBoxButton.OK);
+                logger.ErrorException("Error selecting Project-Root folder", ex);
             }
         }
 
@@ -679,6 +698,8 @@ namespace IfsSvnClient.UserControls
             try
             {
                 listBoxComponents.SelectAll();
+
+                logger.Info("buttonComponentsSelectAll");
             }
             catch (Exception)
             {
@@ -690,6 +711,8 @@ namespace IfsSvnClient.UserControls
             try
             {
                 listBoxComponents.UnselectAll();
+
+                logger.Info("buttonComponentsUnselectAll");
             }
             catch (Exception)
             {
@@ -701,6 +724,8 @@ namespace IfsSvnClient.UserControls
             try
             {
                 this.SelectCheckedOutComponents();
+
+                logger.Info("buttonComponentsSelectCheckedOut");
             }
             catch (Exception)
             {
@@ -713,6 +738,8 @@ namespace IfsSvnClient.UserControls
             {
                 //textBoxLog.Clear();
                 textBlockLog.Inlines.Clear();
+
+                logger.Info("buttonClearLog");
             }
             catch (Exception)
             {
@@ -728,6 +755,8 @@ namespace IfsSvnClient.UserControls
                     Clipboard.SetText(textBlockLog.Text);
 
                     ModernDialog.ShowMessage("Log copied to clipboard", "Log Copied", MessageBoxButton.OK);
+
+                    logger.Info("buttonCopyLog");
                 }
             }
             catch (Exception)

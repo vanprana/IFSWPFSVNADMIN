@@ -55,6 +55,10 @@
                 </StackPanel>
             </Button.Content>
         </Button>
-
+        <GroupBox Header="User Experience" Height="100" HorizontalAlignment="Left" Margin="12,165,0,0" Name="groupBox1" VerticalAlignment="Top" Width="408" IsEnabled="True">
+            <Grid>
+                <Button Content="Backup Log" Height="30" HorizontalAlignment="Left" Margin="6,6,0,0" Name="button_BackUpLog" VerticalAlignment="Top" Width="104" Click="button_BackUpLog_Click" IsEnabled="True" />
+            </Grid>
+        </GroupBox>
     </Grid>
 </UserControl>

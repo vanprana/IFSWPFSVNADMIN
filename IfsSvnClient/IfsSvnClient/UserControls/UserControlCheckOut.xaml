@@ -10,7 +10,7 @@
              xmlns:p="clr-namespace:IfsSvnClient.Properties"
              Loaded="UserControl_Loaded">
 
-    <Grid Style="{StaticResource ContentRoot}">
+    <Grid Style="{StaticResource ContentRoot}" Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>

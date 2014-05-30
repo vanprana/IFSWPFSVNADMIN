@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="900"
              xmlns:p="clr-namespace:IfsSvnClient.Properties" Loaded="UserControl_Loaded" xmlns:my="clr-namespace:IfsSvnClient.UserControls">
-    <Grid Style="{StaticResource ContentRoot}" Name="gridMain">
+    <Grid Style="{StaticResource ContentRoot}" Name="gridMain" Margin="0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>

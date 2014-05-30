@@ -10,7 +10,7 @@
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:p="clr-namespace:IfsSvnClient.Properties" 
              xmlns:controls="clr-namespace:Microsoft.Lync.Controls;assembly=Microsoft.Lync.Controls">
-    <Grid Style="{StaticResource ContentRoot}">
+    <Grid Style="{StaticResource ContentRoot}" Margin="0">
         <Grid.Resources>
             <controls:ConversationContextualInfo 
                       x:Key="contextualInfo" 

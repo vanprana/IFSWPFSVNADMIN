@@ -112,8 +112,10 @@ namespace IfsSvnClient.UserControls
                         Directory.CreateDirectory(userExperienceDestinationFolderPath);
                     }
 
-                    string logSourceFolderPath = @".\logs";
-                    string userExperienceSourceFolderPath = @".\userExperience";
+                    string sourceFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\IfsSvnClient";
+
+                    string logSourceFolderPath = sourceFolderPath + @"\logs";
+                    string userExperienceSourceFolderPath = sourceFolderPath + @"\userExperience";
 
                     if (Directory.Exists(logSourceFolderPath))
                     {
@@ -132,6 +134,8 @@ namespace IfsSvnClient.UserControls
                             userExperiencefile.CopyTo(userExperienceDestinationFolderPath + @"\" + userExperiencefile.Name);
                         }
                     }
+
+                    ModernDialog.ShowMessage("Log Copy", "Log Files copied.", MessageBoxButton.OK);
                 }
             }
             catch (Exception ex)

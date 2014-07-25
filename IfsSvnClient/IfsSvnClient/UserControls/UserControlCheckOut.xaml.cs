@@ -89,7 +89,7 @@ namespace IfsSvnClient.UserControls
             catch (Exception ex)
             {
                 ModernDialog.ShowMessage(ex.Message, "Error Loading Page", MessageBoxButton.OK);
-                logger.ErrorException("Error Loading Page", ex);
+                logger.Error("Error Loading Page", ex);
             }
         }
 
@@ -146,7 +146,7 @@ namespace IfsSvnClient.UserControls
             catch (Exception ex)
             {
                 ModernDialog.ShowMessage(ex.Message, "Error Checking out Components", MessageBoxButton.OK);
-                logger.ErrorException("Error Checking out Components", ex);
+                logger.Error("Error Checking out Components", ex);
             }
         }
 
@@ -360,7 +360,7 @@ namespace IfsSvnClient.UserControls
                 if (e.Error != null)
                 {
                     ModernDialog.ShowMessage(e.Error.Message, "Error Checking out Components", MessageBoxButton.OK);
-                    logger.ErrorException("Error Checking out Components", e.Error);
+                    logger.Error("Error Checking out Components", e.Error);
                 }
                 else
                 {
@@ -368,65 +368,68 @@ namespace IfsSvnClient.UserControls
                     {
                         List<SvnListEventArgs> nodeList = e.Result as List<SvnListEventArgs>;
 
-                        nodeList.RemoveAt(0);
-
-                        StackPanel treeItemStack;
-                        TextBlock lbl;
-                        Image treeItemImage;
-                        ListBoxItem nodeItem;
-                        List<ListBoxItem> nodeItemList = new List<ListBoxItem>();
-                        foreach (SvnListEventArgs project in nodeList)
+                        if (nodeList != null && nodeList.Count > 0)
                         {
-                            nodeItem = new ListBoxItem();
+                            nodeList.RemoveAt(0);
 
-                            treeItemStack = new StackPanel();
-                            treeItemStack.Orientation = Orientation.Horizontal;
-
-                            lbl = new TextBlock();
-                            lbl.Text = project.Name;
-                            lbl.Margin = new Thickness(3, 1, 3, 1);
-
-                            treeItemImage = new Image();
-                            treeItemImage.Source = projectImage;
-                            treeItemImage.Margin = new Thickness(3, 1, 3, 1);
-
-                            treeItemStack.Children.Add(treeItemImage);
-                            treeItemStack.Children.Add(lbl);
-
-                            nodeItem.Content = treeItemStack;
-                            nodeItem.Tag = new SvnProject(project);
-
-                            nodeItemList.Add(nodeItem);
-                        }
-
-                        if (nodeItemList.Count > 0)
-                        {
-                            listBoxProjectList.ItemsSource = nodeItemList;
-                        }
-
-                        if (string.IsNullOrWhiteSpace(Properties.Settings.Default.SelectedProject) == false &&
-                            Properties.Settings.Default.SelectedProject != "ProjectsRoot")
-                        {
-                            foreach (ListBoxItem item in listBoxProjectList.Items)
+                            StackPanel treeItemStack;
+                            TextBlock lbl;
+                            Image treeItemImage;
+                            ListBoxItem nodeItem;
+                            List<ListBoxItem> nodeItemList = new List<ListBoxItem>();
+                            foreach (SvnListEventArgs project in nodeList)
                             {
-                                if ((item.Tag as SvnProject).Name == Properties.Settings.Default.SelectedProject)
+                                nodeItem = new ListBoxItem();
+
+                                treeItemStack = new StackPanel();
+                                treeItemStack.Orientation = Orientation.Horizontal;
+
+                                lbl = new TextBlock();
+                                lbl.Text = project.Name;
+                                lbl.Margin = new Thickness(3, 1, 3, 1);
+
+                                treeItemImage = new Image();
+                                treeItemImage.Source = projectImage;
+                                treeItemImage.Margin = new Thickness(3, 1, 3, 1);
+
+                                treeItemStack.Children.Add(treeItemImage);
+                                treeItemStack.Children.Add(lbl);
+
+                                nodeItem.Content = treeItemStack;
+                                nodeItem.Tag = new SvnProject(project);
+
+                                nodeItemList.Add(nodeItem);
+                            }
+
+                            if (nodeItemList.Count > 0)
+                            {
+                                listBoxProjectList.ItemsSource = nodeItemList;
+                            }
+
+                            if (string.IsNullOrWhiteSpace(Properties.Settings.Default.SelectedProject) == false &&
+                                Properties.Settings.Default.SelectedProject != "ProjectsRoot")
+                            {
+                                foreach (ListBoxItem item in listBoxProjectList.Items)
                                 {
-                                    listBoxProjectList.SelectedItem = item;
-                                    listBoxProjectList.ScrollIntoView(item);
-                                    break;
+                                    if ((item.Tag as SvnProject).Name == Properties.Settings.Default.SelectedProject)
+                                    {
+                                        listBoxProjectList.SelectedItem = item;
+                                        listBoxProjectList.ScrollIntoView(item);
+                                        break;
+                                    }
                                 }
                             }
-                        }
 
-                        if (Properties.Settings.Default.RememberFiltering)
-                        {
-                            textBoxProjectsFilter.Text = Properties.Settings.Default.TextBoxProjectsFilter_text;
-                            textBoxComponentFilter.Text = Properties.Settings.Default.TextBoxComponentFilter_text;
-                        }
+                            if (Properties.Settings.Default.RememberFiltering)
+                            {
+                                textBoxProjectsFilter.Text = Properties.Settings.Default.TextBoxProjectsFilter_text;
+                                textBoxComponentFilter.Text = Properties.Settings.Default.TextBoxComponentFilter_text;
+                            }
 
-                        if (Properties.Settings.Default.SelectCheckedOutAtStartUp)
-                        {
-                            this.SelectCheckedOutComponents();
+                            if (Properties.Settings.Default.SelectCheckedOutAtStartUp)
+                            {
+                                this.SelectCheckedOutComponents();
+                            }
                         }
                     }
                 }
@@ -435,7 +438,7 @@ namespace IfsSvnClient.UserControls
             }
             catch (Exception ex)
             {
-                ModernDialog.ShowMessage(ex.Message, "Error", MessageBoxButton.OK);
+                ModernDialog.ShowMessage(ex.Message, "Error backgroundWorker issue", MessageBoxButton.OK);
             }
             finally
             {
@@ -506,7 +509,7 @@ namespace IfsSvnClient.UserControls
             catch (Exception ex)
             {
                 ModernDialog.ShowMessage(ex.Message, "Error Loading Components", MessageBoxButton.OK);
-                logger.ErrorException("Error Loading Components", ex);
+                logger.Error("Error Loading Components", ex);
             }
         }
 
@@ -639,7 +642,7 @@ namespace IfsSvnClient.UserControls
             catch (Exception ex)
             {
                 ModernDialog.ShowMessage(ex.Message, "Error navigation to folder path", MessageBoxButton.OK);
-                logger.ErrorException("Error navigation to folder path", ex);
+                logger.Error("Error navigation to folder path", ex);
             }
         }
 
@@ -689,7 +692,7 @@ namespace IfsSvnClient.UserControls
             catch (Exception ex)
             {
                 ModernDialog.ShowMessage(ex.Message, "Error selecting Project-Root folder", MessageBoxButton.OK);
-                logger.ErrorException("Error selecting Project-Root folder", ex);
+                logger.Error("Error selecting Project-Root folder", ex);
             }
         }
 

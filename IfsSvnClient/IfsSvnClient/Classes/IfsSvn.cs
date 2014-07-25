@@ -13,6 +13,12 @@ namespace IfsSvnClient.Classes
         private readonly SvnUriTarget componentsUri = new SvnUriTarget(Properties.Settings.Default.ServerUri + "/applications");
         private readonly SvnUriTarget projectsUri = new SvnUriTarget(Properties.Settings.Default.ServerUri + "/projects");
 
+        private bool CheckUrlValide(SvnClient client, SvnUriTarget uri)
+        {
+            Collection<SvnInfoEventArgs> info;
+            return client.GetInfo(uri, new SvnInfoArgs { ThrowOnError = false }, out info);
+        }
+
         internal List<SvnListEventArgs> GetProjectList()
         {
             try
@@ -48,15 +54,18 @@ namespace IfsSvnClient.Classes
                     // Bind the SharpSvn UI to our client for SSL certificate and credentials
                     SvnUIBindArgs bindArgs = new SvnUIBindArgs();
                     SvnUI.Bind(client, bindArgs);
-                    
-                    Collection<SvnListEventArgs> itemList;
-                    if (client.GetList(targetUri, out itemList))
+
+                    if (this.CheckUrlValide(client, targetUri))
                     {
-                        foreach (SvnListEventArgs component in itemList)
+                        Collection<SvnListEventArgs> itemList;
+                        if (client.GetList(targetUri, out itemList))
                         {
-                            if (component.Entry.NodeKind == SvnNodeKind.Directory)
+                            foreach (SvnListEventArgs component in itemList)
                             {
-                                folderList.Add(component);
+                                if (component.Entry.NodeKind == SvnNodeKind.Directory)
+                                {
+                                    folderList.Add(component);
+                                }
                             }
                         }
                     }
@@ -125,17 +134,18 @@ namespace IfsSvnClient.Classes
                     SvnUriTarget projectUri = new SvnUriTarget(seletedProject.Path + Properties.Settings.Default.ServerWorkSpace + "/");
 
                     string components;
-                    client.TryGetProperty(projectUri, SvnPropertyNames.SvnExternals, out components);
-
-                    if (string.IsNullOrWhiteSpace(components) == false)
+                    if (client.TryGetProperty(projectUri, SvnPropertyNames.SvnExternals, out components))
                     {
-                        string[] componentInforArray = components.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-                        SvnComponent component;
-                        foreach (string componentInfor in componentInforArray)
+                        if (string.IsNullOrWhiteSpace(components) == false)
                         {
-                            component = new SvnComponent(componentInfor);
-                            componentList.Add(component);
+                            string[] componentInforArray = components.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                            SvnComponent component;
+                            foreach (string componentInfor in componentInforArray)
+                            {
+                                component = new SvnComponent(componentInfor);
+                                componentList.Add(component);
+                            }
                         }
                     }
                 }
@@ -161,21 +171,117 @@ namespace IfsSvnClient.Classes
                     SvnUriTarget projectUri = new SvnUriTarget(seletedProject.Path + Properties.Settings.Default.ServerDocumentation + "/");
 
                     string components;
-                    client.TryGetProperty(projectUri, SvnPropertyNames.SvnExternals, out components);
-
-                    if (string.IsNullOrWhiteSpace(components) == false)
+                    if (client.TryGetProperty(projectUri, SvnPropertyNames.SvnExternals, out components))
                     {
-                        string[] componentInforArray = components.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-                        SvnComponent component;
-                        foreach (string componentInfor in componentInforArray)
+                        if (string.IsNullOrWhiteSpace(components) == false)
                         {
-                            component = new SvnComponent(componentInfor);
-                            componentList.Add(component);
+                            string[] componentInforArray = components.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                            SvnComponent component;
+                            foreach (string componentInfor in componentInforArray)
+                            {
+                                component = new SvnComponent(componentInfor);
+                                componentList.Add(component);
+                            }
                         }
                     }
                 }
                 return componentList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        internal bool CreateComponents(List<string> componentNameList)
+        {
+            try
+            {
+                using (SvnClient client = new SvnClient())
+                {
+                    // Bind the SharpSvn UI to our client for SSL certificate and credentials
+                    SvnUIBindArgs bindArgs = new SvnUIBindArgs();
+                    SvnUI.Bind(client, bindArgs);
+
+                    List<Uri> folderList = new List<Uri>();
+
+                    if (componentNameList.Count > 0)
+                    {
+                        foreach (string componentName in componentNameList)
+                        {
+                            SvnUriTarget componentUrl = new SvnUriTarget(this.componentsUri + "/" + componentName);
+
+                            if (this.CheckUrlValide(client, componentUrl) == false)
+                            {
+                                folderList.AddRange(new Uri[] 
+                                {
+                                    componentUrl.Uri,
+                                    new Uri(string.Format("{0}/branches/", componentUrl.ToString())),
+                                    new Uri(string.Format("{0}/branches/archive", componentUrl.ToString())),
+                                    new Uri(string.Format("{0}/branches/core", componentUrl.ToString())),
+                                    new Uri(string.Format("{0}/branches/core/ifsapp-8.0", componentUrl.ToString())),
+                                    new Uri(string.Format("{0}/branches/core/ifsapp-8.0/main", componentUrl.ToString())),
+                                    new Uri(string.Format("{0}/branches/core/ifsapp-9.0", componentUrl.ToString())),
+                                    new Uri(string.Format("{0}/branches/core/ifsapp-9.0/main", componentUrl.ToString())),
+                                    new Uri(string.Format("{0}/branches/project", componentUrl.ToString())),
+                                    new Uri(string.Format("{0}/tags/", componentUrl.ToString())),
+                                    new Uri(string.Format("{0}/trunk/", componentUrl.ToString()))
+                                });
+                            }
+                        }
+
+                        SvnCreateDirectoryArgs arg = new SvnCreateDirectoryArgs();
+                        arg.CreateParents = true;
+                        arg.LogMessage = "ADMIN-0: Component structure created.";
+                    }
+                    return client.RemoteCreateDirectories(folderList, arg);
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        internal bool CreateProject(string projectName)
+        {
+            try
+            {
+                using (SvnClient client = new SvnClient())
+                {
+                    // Bind the SharpSvn UI to our client for SSL certificate and credentials
+                    SvnUIBindArgs bindArgs = new SvnUIBindArgs();
+                    SvnUI.Bind(client, bindArgs);
+
+                    List<Uri> folderList = new List<Uri>();
+
+                    if (string.IsNullOrWhiteSpace(projectName) == false)
+                    {
+                        SvnUriTarget projectUrl = new SvnUriTarget(this.projectsUri + "/" + projectName);
+
+                        if (this.CheckUrlValide(client, projectsUri) == false)
+                        {
+                            folderList.AddRange(new Uri[] 
+                            {
+                               projectUrl.Uri,
+                               new Uri(string.Format("{0}/documentation/", projectUrl.ToString())),
+                               new Uri(string.Format("{0}/nbproject/", projectUrl.ToString())),
+                               new Uri(string.Format("{0}/release/", projectUrl.ToString())),    
+                               new Uri(string.Format("{0}/tags/", projectUrl.ToString())),   
+                               new Uri(string.Format("{0}/workspace/", projectUrl.ToString()))
+                            });
+                        }
+
+                        SvnCreateDirectoryArgs arg = new SvnCreateDirectoryArgs();
+                        arg.CreateParents = true;
+                        arg.LogMessage = "ADMIN-0: Component structure created.";
+
+                        return client.RemoteCreateDirectories(folderList, arg);
+                    }
+                }
+                return false;
             }
             catch (Exception)
             {

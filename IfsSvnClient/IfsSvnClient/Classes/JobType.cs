@@ -10,6 +10,8 @@ namespace IfsSvnClient.Classes
         CheckOut,
         Load,
         LoadProjects,
-        LoadComponents
+        LoadComponents,
+        CreateProject,
+        CreateComponents
     }
 }

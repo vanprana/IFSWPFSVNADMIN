@@ -26,6 +26,7 @@
                 <mui:Link DisplayName="Search For Branch" Source="/UserControls/UserControlSearchBranch.xaml"/>
                 <mui:Link DisplayName="Tag and Branch Manager" Source="/UserControls/UserControlManageTagBranch.xaml"/>
                 <mui:Link DisplayName="Find Static Components" Source="/UserControls/UserControlFindStaticComponents.xaml"/>
+                <mui:Link DisplayName="Component Manager" Source="/UserControls/UserControlComponentManager.xaml"/>
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
     </mui:ModernWindow.MenuLinkGroups>

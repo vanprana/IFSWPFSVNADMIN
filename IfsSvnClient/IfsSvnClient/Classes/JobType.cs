@@ -12,6 +12,7 @@ namespace IfsSvnClient.Classes
         LoadProjects,
         LoadComponents,
         CreateProject,
-        CreateComponents
+        CreateComponents,
+        CreateBranch,
     }
 }

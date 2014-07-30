@@ -131,6 +131,7 @@ namespace IfsSvnClient.UserControls
                 finally
                 {
                     //buttonFind.Content = "Find";
+                    progressBarMain.Visibility = System.Windows.Visibility.Collapsed;
                 }
             }
         }
@@ -141,6 +142,8 @@ namespace IfsSvnClient.UserControls
             {
                 if (backgroundWorkerLoad.IsBusy == false)
                 {
+                    progressBarMain.Visibility = System.Windows.Visibility.Visible;
+
                     backgroundWorkerLoad.RunWorkerAsync(new TagArguments(JobType.LoadComponents));
                 }
             }

@@ -30,7 +30,7 @@
     <UpdateUrl>\\ththlk1\Apps\IFS SVN Client\</UpdateUrl>
     <TargetCulture>en</TargetCulture>
     <ProductName>IFS SVN Client</ProductName>
-    <ApplicationRevision>37</ApplicationRevision>
+    <ApplicationRevision>39</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

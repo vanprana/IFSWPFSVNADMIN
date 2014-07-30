@@ -5,17 +5,25 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="900"
-             xmlns:p="clr-namespace:IfsSvnClient.Properties" Loaded="UserControl_Loaded" xmlns:my="clr-namespace:IfsSvnClient.UserControls">
+             xmlns:p="clr-namespace:IfsSvnClient.Properties" 
+             Loaded="UserControl_Loaded" 
+             xmlns:my="clr-namespace:IfsSvnClient.UserControls">
     <Grid Style="{StaticResource ContentRoot}" Name="gridMain" Margin="0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>       
+        </Grid.ColumnDefinitions>   
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <ListBox Name="listBoxComponentList" SelectionChanged="listBoxComponentList_SelectionChanged" MinWidth="150"/>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="6" ShowsPreview="True"/>
         <TreeView Grid.Column="2" Name="treeViewComponent" MinWidth="150" SelectedItemChanged="treeViewComponent_SelectedItemChanged" IsTextSearchEnabled="True" />
         <my:UserControlCreateBranchFromTag Grid.Column="3" x:Name="userControlCreateBranchFromSelectedTag" Visibility="Collapsed" />
+
+        <ProgressBar Grid.Row="1" Grid.ColumnSpan="4" Name="progressBarMain" IsIndeterminate="True" Visibility="Collapsed" Height="Auto" Margin="3" IsTabStop="False" />
     </Grid>
 </UserControl>

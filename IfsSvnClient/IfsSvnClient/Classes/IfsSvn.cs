@@ -234,8 +234,9 @@ namespace IfsSvnClient.Classes
                         SvnCreateDirectoryArgs arg = new SvnCreateDirectoryArgs();
                         arg.CreateParents = true;
                         arg.LogMessage = "ADMIN-0: Component structure created.";
+
+                        return client.RemoteCreateDirectories(folderList, arg);
                     }
-                    return client.RemoteCreateDirectories(folderList, arg);
                 }
                 return false;
             }
@@ -279,6 +280,40 @@ namespace IfsSvnClient.Classes
                         arg.LogMessage = "ADMIN-0: Component structure created.";
 
                         return client.RemoteCreateDirectories(folderList, arg);
+                    }
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        internal bool CreateBranch(SvnListEventArgs selectedTag, string branchName)
+        {
+            try
+            {
+                if (selectedTag != null)
+                {
+                    using (SvnClient client = new SvnClient())
+                    {
+                        // Bind the SharpSvn UI to our client for SSL certificate and credentials
+                        SvnUIBindArgs bindArgs = new SvnUIBindArgs();
+                        SvnUI.Bind(client, bindArgs);
+
+                        string relativeComponentPath = string.Join(string.Empty, selectedTag.BaseUri.Segments.Take(selectedTag.BaseUri.Segments.Count() - 1).ToArray());
+                        string server = selectedTag.BaseUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.SafeUnescaped);
+
+                        Uri barnchUri = new Uri(server + relativeComponentPath + "branches/project/" + branchName);
+
+                        SvnTarget source = SvnTarget.FromUri(selectedTag.Uri);
+
+                        SvnCopyArgs arg = new SvnCopyArgs();
+                        arg.CreateParents = false;
+                        arg.LogMessage = string.Format("ADMIN-0: Branch Created from Tag {0}", selectedTag.Name);
+                        
+                        return client.RemoteCopy(source, barnchUri, arg);
                     }
                 }
                 return false;

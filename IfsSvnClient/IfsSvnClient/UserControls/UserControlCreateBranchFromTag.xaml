@@ -14,6 +14,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -29,6 +30,8 @@
         <ComboBox Grid.Column="1" Grid.Row="3" Name="comboBoxProjectList" Margin="3" SelectionChanged="comboBoxProjectList_SelectionChanged" SelectedIndex="0" />
         <Label Content="Branch Name:" Grid.Row="4" Name="label3" Margin="3"  Padding="3"/>
         <TextBox Grid.Column="1" Grid.Row="4" Name="textBoxBranchName" Margin="3"/>
-        <Button Content="Create" Grid.Column="1" Grid.Row="5" Name="buttonCreate" Width="75" HorizontalAlignment="Right" Click="buttonCreate_Click" />        
+        <Button Content="Create" Grid.Column="1" Grid.Row="5" Name="buttonCreate" Width="75" HorizontalAlignment="Right" Click="buttonCreate_Click" />
+
+        <ProgressBar Grid.Row="7" Grid.ColumnSpan="2" Name="progressBarMain" IsIndeterminate="True" Visibility="Collapsed" Height="Auto" Margin="3" IsTabStop="False" />
     </Grid>
 </UserControl>

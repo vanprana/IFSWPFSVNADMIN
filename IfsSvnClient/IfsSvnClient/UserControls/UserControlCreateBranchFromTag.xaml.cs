@@ -54,6 +54,8 @@ namespace IfsSvnClient.UserControls
             {
                 if (backgroundWorkerLoad.IsBusy == false)
                 {
+                    progressBarMain.Visibility = System.Windows.Visibility.Visible;
+
                     backgroundWorkerLoad.RunWorkerAsync(new TagArguments(JobType.LoadProjects));
                 }
             }
@@ -78,6 +80,10 @@ namespace IfsSvnClient.UserControls
                     if (arg.Type == JobType.LoadProjects)
                     {
                         e.Result = myIfsSvn.GetProjectList();
+                    }
+                    else if (arg.Type == JobType.CreateBranch)
+                    {
+                        e.Result = myIfsSvn.CreateBranch(arg.SelectedTag, arg.BranchName);
                     }
                 }
 
@@ -117,21 +123,35 @@ namespace IfsSvnClient.UserControls
                     {
                         if (e.Result != null)
                         {
-                            List<SvnListEventArgs> forlderList = e.Result as List<SvnListEventArgs>;
-
-                            List<SvnProject> projectList = new List<SvnProject>();
-                            foreach (SvnListEventArgs folder in forlderList)
+                            if (e.Result is bool)
                             {
-                                if (string.IsNullOrWhiteSpace(folder.Path) == false)
+                                if ((bool)e.Result)
                                 {
-                                    projectList.Add(new SvnProject(folder));
+                                    ModernDialog.ShowMessage("OK", "Creating Branch", MessageBoxButton.OK);
+                                }
+                                else
+                                {
+                                    ModernDialog.ShowMessage("Was not Created.", "Creating Branch", MessageBoxButton.OK);
                                 }
                             }
-                            SvnProject selectedProject = projectList.FirstOrDefault(p => p.Name == Properties.Settings.Default.SelectedProjectForBranchCreate);                            
-                            comboBoxProjectList.ItemsSource = projectList;
-                            if (selectedProject != null)
+                            else
                             {
-                                comboBoxProjectList.SelectedItem = selectedProject;
+                                List<SvnListEventArgs> forlderList = e.Result as List<SvnListEventArgs>;
+
+                                List<SvnProject> projectList = new List<SvnProject>();
+                                foreach (SvnListEventArgs folder in forlderList)
+                                {
+                                    if (string.IsNullOrWhiteSpace(folder.Path) == false)
+                                    {
+                                        projectList.Add(new SvnProject(folder));
+                                    }
+                                }
+                                SvnProject selectedProject = projectList.FirstOrDefault(p => p.Name == Properties.Settings.Default.SelectedProjectForBranchCreate);
+                                comboBoxProjectList.ItemsSource = projectList;
+                                if (selectedProject != null)
+                                {
+                                    comboBoxProjectList.SelectedItem = selectedProject;
+                                }
                             }
                         }
                     }
@@ -142,7 +162,7 @@ namespace IfsSvnClient.UserControls
                 }
                 finally
                 {
-                    //buttonFind.Content = "Find";
+                    progressBarMain.Visibility = System.Windows.Visibility.Collapsed;
                 }
             }
         }
@@ -181,7 +201,19 @@ namespace IfsSvnClient.UserControls
 
         private void buttonCreate_Click(object sender, RoutedEventArgs e)
         {
-            ModernDialog.ShowMessage("Not implemented Yet!", "Implementation", MessageBoxButton.OK);
+            try
+            {
+                if (backgroundWorkerLoad.IsBusy == false)
+                {
+                    progressBarMain.Visibility = System.Windows.Visibility.Visible;
+
+                    backgroundWorkerLoad.RunWorkerAsync(new TagArguments(JobType.CreateBranch) { SelectedTag = this.selectedTag, BranchName = textBoxBranchName.Text.Trim() });
+                }
+            }
+            catch (Exception ex)
+            {
+                ModernDialog.ShowMessage(ex.Message, "Error Creating Branch", MessageBoxButton.OK);
+            }
         }
     }
 }

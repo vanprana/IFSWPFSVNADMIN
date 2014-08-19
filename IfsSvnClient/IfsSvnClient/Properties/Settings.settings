@@ -8,9 +8,6 @@
     <Setting Name="ServerWorkSpace" Type="System.String" Scope="User">
       <Value Profile="(Default)">workspace</Value>
     </Setting>
-    <Setting Name="ServerUri" Type="System.String" Scope="User">
-      <Value Profile="(Default)">https://cmbsvn01/svn/ifsapp</Value>
-    </Setting>
     <Setting Name="SelectedProject" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -43,6 +40,16 @@
     </Setting>
     <Setting Name="ServerDocumentation" Type="System.String" Scope="User">
       <Value Profile="(Default)">documentation</Value>
+    </Setting>
+    <Setting Name="ServerUriList" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;https://cmbsvn01/svn/ifsapp&lt;/string&gt;
+  &lt;string&gt;https://lkpsvn01/svn/ifsapp&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="ServerUri" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

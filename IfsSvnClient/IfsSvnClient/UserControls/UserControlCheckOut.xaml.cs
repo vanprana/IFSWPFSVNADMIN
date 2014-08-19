@@ -32,7 +32,7 @@ namespace IfsSvnClient.UserControls
         private BackgroundWorker backgroundWorkerCheckOut;
         private delegate void backgroundWorkerCheckOut_RunWorkerCompletedDelegate(object sender, RunWorkerCompletedEventArgs e);
         private bool _cancelCheckout = false;
-        private readonly SvnUriTarget projectsUri = new SvnUriTarget(Properties.Settings.Default.ServerUri + "/projects");
+        private SvnUriTarget projectsUri;
         private delegate void client_NotifyDelegate(object sender, SvnNotifyEventArgs e);
         private delegate void logDelegate(string message, bool showLessLogInformation);
 
@@ -78,13 +78,18 @@ namespace IfsSvnClient.UserControls
         {
             try
             {
-                textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\";
-                if (backgroundWorkerCheckOut.IsBusy == false)
+                if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ServerUri) == false)
                 {
-                    progressBarMain.Visibility = System.Windows.Visibility.Visible;
+                    projectsUri = new SvnUriTarget(Properties.Settings.Default.ServerUri + "/projects");
 
-                    backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(JobType.Load));
-                }
+                    textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\";
+                    if (backgroundWorkerCheckOut.IsBusy == false)
+                    {
+                        progressBarMain.Visibility = System.Windows.Visibility.Visible;
+
+                        backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(JobType.Load));
+                    }
+                }               
             }
             catch (Exception ex)
             {

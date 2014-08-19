@@ -49,18 +49,6 @@ namespace IfsSvnClient.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://cmbsvn01/svn/ifsapp")]
-        public string ServerUri {
-            get {
-                return ((string)(this["ServerUri"]));
-            }
-            set {
-                this["ServerUri"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SelectedProject {
             get {
@@ -188,6 +176,34 @@ namespace IfsSvnClient.Properties {
             }
             set {
                 this["ServerDocumentation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <string>https://cmbsvn01/svn/ifsapp</string>
+  <string>https://lkpsvn01/svn/ifsapp</string>
+</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ServerUriList {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ServerUriList"]));
+            }
+            set {
+                this["ServerUriList"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServerUri {
+            get {
+                return ((string)(this["ServerUri"]));
+            }
+            set {
+                this["ServerUri"] = value;
             }
         }
     }

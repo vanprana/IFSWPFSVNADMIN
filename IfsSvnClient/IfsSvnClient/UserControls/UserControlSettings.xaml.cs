@@ -41,7 +41,7 @@ namespace IfsSvnClient.UserControls
             }
             catch (Exception ex)
             {
-                logger.ErrorException("Error Resetting Property Settings", ex);
+                logger.Error("Error Resetting Property Settings", ex);
             }
         }
 
@@ -52,7 +52,7 @@ namespace IfsSvnClient.UserControls
                 if (myNotifierLync != null)
                 {
                     MessageBoxResult contact = ModernDialog.ShowMessage(
-                                                              "Do you really need to contact Me? :| ",
+                                                              "Support does not like to be contacted just for FUN!\r\nDo you really need to contact Me? :| ",
                                                               "Contact Support",
                                                               MessageBoxButton.YesNo);
                     if (contact == MessageBoxResult.Yes)
@@ -65,7 +65,7 @@ namespace IfsSvnClient.UserControls
             catch (Exception ex)
             {
                 ModernDialog.ShowMessage(ex.Message, "Error contacting support", MessageBoxButton.OK);
-                logger.ErrorException("Error contacting support", ex);
+                logger.Error("Error contacting support", ex);
             }
         }
 
@@ -141,7 +141,7 @@ namespace IfsSvnClient.UserControls
             catch (Exception ex)
             {
                 ModernDialog.ShowMessage(ex.Message, "Error backing up logs", MessageBoxButton.OK);
-                logger.ErrorException("Error backing up logs", ex);
+                logger.Error("Error backing up logs", ex);
             }
         }
     }

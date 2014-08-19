@@ -10,8 +10,17 @@ namespace IfsSvnClient.Classes
 {
     internal class IfsSvn
     {
-        private readonly SvnUriTarget componentsUri = new SvnUriTarget(Properties.Settings.Default.ServerUri + "/applications");
-        private readonly SvnUriTarget projectsUri = new SvnUriTarget(Properties.Settings.Default.ServerUri + "/projects");
+        private SvnUriTarget componentsUri;
+        private SvnUriTarget projectsUri;
+
+        internal IfsSvn()
+        {
+            if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ServerUri) == false)
+            {
+                this.componentsUri = new SvnUriTarget(Properties.Settings.Default.ServerUri + "/applications");
+                this.projectsUri = new SvnUriTarget(Properties.Settings.Default.ServerUri + "/projects");
+            }
+        }
 
         private bool CheckUrlValide(SvnClient client, SvnUriTarget uri)
         {
@@ -312,7 +321,7 @@ namespace IfsSvnClient.Classes
                         SvnCopyArgs arg = new SvnCopyArgs();
                         arg.CreateParents = false;
                         arg.LogMessage = string.Format("ADMIN-0: Branch Created from Tag {0}", selectedTag.Name);
-                        
+
                         return client.RemoteCopy(source, barnchUri, arg);
                     }
                 }

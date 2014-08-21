@@ -19,7 +19,7 @@ namespace IfsSvnClient
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : ModernWindow
-    {       
+    {
 
         public MainWindow()
         {
@@ -33,7 +33,22 @@ namespace IfsSvnClient
                 Properties.Settings.Default.Save();
             }
             catch (Exception)
-            {                
+            {
+
+            }
+        }
+
+        private void ModernWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {                                                
+                if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ServerUri))
+                {
+                    this.ContentSource = linkSVNServer.Source;
+                }
+            }
+            catch (Exception)
+            {
                 
             }
         }

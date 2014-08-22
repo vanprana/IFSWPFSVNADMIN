@@ -38,6 +38,8 @@ namespace IfsSvnClient.UserControls
             try
             {
                 Properties.Settings.Default.Reset();
+
+                ModernDialog.ShowMessage("Settings Reset OK", "Settings Reset", MessageBoxButton.OK);
             }
             catch (Exception ex)
             {

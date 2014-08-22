@@ -183,8 +183,8 @@ namespace IfsSvnClient.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>https://cmbsvn01/svn/ifsapp</string>
-  <string>https://lkpsvn01/svn/ifsapp</string>
+  <string>Sri Lanka | https://cmbsvn01/svn/ifsapp</string>
+  <string>Sweden | https://lkpsvn01/svn/ifsapp</string>
 </ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection ServerUriList {
             get {

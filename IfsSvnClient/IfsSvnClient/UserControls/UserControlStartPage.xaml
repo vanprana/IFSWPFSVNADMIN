@@ -6,15 +6,19 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" 
              d:DesignWidth="600" 
-             xmlns:my="clr-namespace:IfsSvnClient.Properties">
-    <Grid>
+             xmlns:my="clr-namespace:IfsSvnClient.Properties" Loaded="UserControl_Loaded">
+    <Grid Opacity="1">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="1" Margin="3" Content="SVN Server URI:" Name="label1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" />
-        <ComboBox Grid.Row="2" Margin="3" ItemsSource="{Binding Source={x:Static my:Settings.Default}, Path=ServerUriList, Mode=OneTime}" Name="comboBoxServerUri" SelectedValue="{Binding Source={x:Static my:Settings.Default}, Path=ServerUri, Mode=TwoWay}" FontSize="20" />
+        <Label Grid.Row="1" Margin="3" Content="Please Select IFS SVN Server URI:" Name="label1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" />
+        <Label Grid.Row="2" Margin="3" Content="Select Sri Lankan URL if you are in Sri Lanka else use the Sweden one"/>
+        <ComboBox x:Name="comboBoxServerUriList" Grid.Row="3" Margin="3" ItemsSource="{Binding Source={x:Static my:Settings.Default}, Path=ServerUriList, Mode=OneTime}" FontSize="20" />
+        <Button Grid.Row="4" Content="OK"  HorizontalAlignment="Right" Name="buttonOk" Margin="3" Click="buttonOk_Click" />
     </Grid>
 </UserControl>

@@ -24,7 +24,8 @@ namespace IfsSvnClient.Classes
 
         private bool CheckUrlValide(SvnClient client, SvnUriTarget uri)
         {
-            Collection<SvnInfoEventArgs> info;
+            Collection<SvnInfoEventArgs> info = new Collection<SvnInfoEventArgs>();
+
             return client.GetInfo(uri, new SvnInfoArgs { ThrowOnError = false }, out info);
         }
 
@@ -271,7 +272,7 @@ namespace IfsSvnClient.Classes
                     {
                         SvnUriTarget projectUrl = new SvnUriTarget(this.projectsUri + "/" + projectName);
 
-                        if (this.CheckUrlValide(client, projectsUri) == false)
+                        if (this.CheckUrlValide(client, projectUrl) == false)
                         {
                             folderList.AddRange(new Uri[] 
                             {

@@ -9,9 +9,11 @@ namespace IfsSvnClient.Classes
     {
         internal JobType Type { get; set; }
         internal SvnComponent[] CompornentArray { get; set; }
+        internal bool HasDocCompornents { get; set; }
         internal string CheckOutPathProject { get; set; }
         internal string CheckOutPathNbproject { get; set; }
         internal string CheckOutPathDocument { get; private set; }
+        internal string CheckOutPathDocumentEn { get; private set; }
         internal string CheckOutPathWorkspace { get; private set; }
         internal Uri ProjectNbprojectUri { get; private set; }
         internal Uri ProjectWorkspaceUri { get; private set; }
@@ -32,7 +34,7 @@ namespace IfsSvnClient.Classes
             this.ProjectNbprojectUri = new Uri(projectPath + Properties.Settings.Default.ServerNbProject);
             this.ProjectDocumentUri = new Uri(projectPath + Properties.Settings.Default.ServerDocumentation);
             this.ProjectWorkspaceUri = new Uri(projectPath + Properties.Settings.Default.ServerWorkSpace);
-
+            
             this.CheckOutPathNbproject = this.CheckOutPathProject;
             this.CheckOutPathDocument = this.CheckOutPathProject;
             this.CheckOutPathWorkspace = this.CheckOutPathProject;
@@ -50,9 +52,19 @@ namespace IfsSvnClient.Classes
             }
             this.CheckOutPathNbproject += @"\";
             this.CheckOutPathDocument += @"\";
+            this.CheckOutPathDocumentEn = this.CheckOutPathDocument + @"en";
             this.CheckOutPathWorkspace += @"\";
 
             this.CompornentArray = componentArray;
+
+            if (this.CompornentArray.Count(c => c.Type == SvnComponent.SvnComponentType.Document) > 0)
+            {
+                this.HasDocCompornents = true;
+            }
+            else
+            {
+                this.HasDocCompornents = false;
+            }
         }
     }
 }

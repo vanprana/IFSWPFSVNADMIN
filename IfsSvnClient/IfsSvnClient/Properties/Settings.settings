@@ -51,5 +51,8 @@
     <Setting Name="ServerUri" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="ServerDocumentationOnlinedocframework" Type="System.String" Scope="User">
+      <Value Profile="(Default)">^/documentation/onlinedocframework/trunk</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -224,6 +224,13 @@ namespace IfsSvnClient.UserControls
                 this.Log("Starting Component Checking Out at " + DateTime.Now.ToString(), arg.ShowLessLogInformation);
 
                 Uri componentUri;
+                if (arg.HasDocCompornents)
+                {
+                    componentUri = new Uri(Properties.Settings.Default.ServerDocumentationOnlinedocframework.Replace("^/", rootUri.AbsoluteUri));
+
+                    client.CheckOut(componentUri, arg.CheckOutPathDocumentEn);
+                }
+                               
                 foreach (SvnComponent component in arg.CompornentArray)
                 {
                     componentUri = new Uri(component.Path.Replace("^/", rootUri.AbsoluteUri));
@@ -236,7 +243,12 @@ namespace IfsSvnClient.UserControls
                     }
                     else if (component.Type == SvnComponent.SvnComponentType.Document)
                     {
-                        client.CheckOut(componentUri, arg.CheckOutPathDocument + @"\" + component.Name);
+                        List<SvnListEventArgs> folderList = myIfsSvn.GetFolderList(componentUri);
+                        folderList.RemoveAt(0);
+                        foreach (SvnListEventArgs folder in folderList)
+                        {
+                            client.CheckOut(folder.Uri, arg.CheckOutPathDocumentEn + @"\" + folder.Name);
+                        }
                     }
                 }
             }

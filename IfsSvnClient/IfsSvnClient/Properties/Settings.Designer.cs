@@ -206,5 +206,17 @@ namespace IfsSvnClient.Properties {
                 this["ServerUri"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("^/documentation/onlinedocframework/trunk")]
+        public string ServerDocumentationOnlinedocframework {
+            get {
+                return ((string)(this["ServerDocumentationOnlinedocframework"]));
+            }
+            set {
+                this["ServerDocumentationOnlinedocframework"] = value;
+            }
+        }
     }
 }

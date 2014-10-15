@@ -38,7 +38,27 @@ namespace IfsSvnClient.UserControls
 
         public void OnNavigatedTo(FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs e)
         {
-
+            try
+            {
+                if (e.NavigationType == FirstFloor.ModernUI.Windows.Navigation.NavigationType.New)
+                {
+                    if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ServerUri) == false)
+                    {
+                        foreach (object item in comboBoxServerUriList.Items)
+                        {
+                            if (item.ToString().Contains(Properties.Settings.Default.ServerUri))
+                            {
+                                comboBoxServerUriList.SelectedValue = item;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                ModernDialog.ShowMessage(error.Message, "Error Loading", MessageBoxButton.OK);
+            }
         }
 
         public void OnNavigatingFrom(FirstFloor.ModernUI.Windows.Navigation.NavigatingCancelEventArgs e)
@@ -77,28 +97,6 @@ namespace IfsSvnClient.UserControls
             catch (Exception error)
             {
                 ModernDialog.ShowMessage(error.Message, FirstFloor.ModernUI.Resources.NavigationFailed, MessageBoxButton.OK);
-            }
-        }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ServerUri) == false)
-                {
-                    foreach (object item in comboBoxServerUriList.Items)
-                    {
-                        if (item.ToString().Contains(Properties.Settings.Default.ServerUri))
-                        {
-                            comboBoxServerUriList.SelectedValue = item;
-                            break;
-                        }
-                    }
-                }
-            }
-            catch (Exception error)
-            {
-                ModernDialog.ShowMessage(error.Message, "Error Loading", MessageBoxButton.OK);
             }
         }
     }

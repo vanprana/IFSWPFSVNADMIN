@@ -7,8 +7,7 @@
              d:DesignHeight="492" 
              d:DesignWidth="800" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             xmlns:p="clr-namespace:IfsSvnClient.Properties"
-             Loaded="UserControl_Loaded">
+             xmlns:p="clr-namespace:IfsSvnClient.Properties">
 
     <Grid Style="{StaticResource ContentRoot}" Margin="0">
         <Grid.RowDefinitions>
@@ -38,7 +37,7 @@
                       Softness="0.25" />
                </TextBlock.BitmapEffect>
             </TextBlock>
-            <ListBox Grid.Row="1" Name="listBoxProjectList" Margin="3" MinWidth="150" IsTextSearchEnabled="True" SelectionChanged="listBoxProjectList_SelectionChanged" BorderThickness="1" ClipToBounds="False" />
+            <ListBox Grid.Row="1" Name="listBoxProjectList" Margin="3" MinWidth="150" IsTextSearchEnabled="True" SelectionChanged="listBoxProjectList_SelectionChanged" BorderThickness="1" ClipToBounds="False" TextSearch.TextPath="Name"/>
             <TextBox Grid.Row="2" Height="23" Margin="3,3,3,0" Name="textBoxProjectsFilter" TextChanged="textBoxProjectsFilter_TextChanged" CharacterCasing="Lower" ToolTip="Filter Projects" TabIndex="20" />
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="6" ShowsPreview="True" IsTabStop="False" />
@@ -59,7 +58,7 @@
                       Softness="0.25" />
                </TextBlock.BitmapEffect>
             </TextBlock>
-            <ListBox Grid.Row="1" Name="listBoxComponents" Margin="3" MinWidth="150" SelectionMode="Multiple" IsTextSearchEnabled="True" />
+            <ListBox Grid.Row="1" Name="listBoxComponents" Margin="3" MinWidth="150" SelectionMode="Multiple" IsTextSearchEnabled="True" TextSearch.TextPath="Name"/>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />

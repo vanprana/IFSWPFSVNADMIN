@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" 
              d:DesignWidth="600" 
-             xmlns:my="clr-namespace:IfsSvnClient.Properties" Loaded="UserControl_Loaded">
+             xmlns:my="clr-namespace:IfsSvnClient.Properties">
     <Grid Opacity="1">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

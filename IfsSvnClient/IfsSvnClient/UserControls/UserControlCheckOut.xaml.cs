@@ -19,13 +19,14 @@ using System.Collections.ObjectModel;
 using FirstFloor.ModernUI.Windows.Controls;
 using System.IO;
 using NLog;
+using FirstFloor.ModernUI.Windows;
 
 namespace IfsSvnClient.UserControls
 {
     /// <summary>
     /// Interaction logic for UserControlCheckOut.xaml
     /// </summary>
-    public partial class UserControlCheckOut : UserControl
+    public partial class UserControlCheckOut : UserControl, IContent
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -72,30 +73,6 @@ namespace IfsSvnClient.UserControls
             cancelImage.BeginInit();
             cancelImage.UriSource = new Uri(@"/IfsSvnClient;component/Resources/cancel.png", UriKind.RelativeOrAbsolute);
             cancelImage.EndInit();
-        }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ServerUri) == false)
-                {
-                    projectsUri = new SvnUriTarget(Properties.Settings.Default.ServerUri + "/projects");
-
-                    textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\";
-                    if (backgroundWorkerCheckOut.IsBusy == false)
-                    {
-                        progressBarMain.Visibility = System.Windows.Visibility.Visible;
-
-                        backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(JobType.Load));
-                    }
-                }               
-            }
-            catch (Exception ex)
-            {
-                ModernDialog.ShowMessage(ex.Message, "Error Loading Page", MessageBoxButton.OK);
-                logger.Error("Error Loading Page", ex);
-            }
         }
 
         private ButtonState ButtonState
@@ -230,7 +207,7 @@ namespace IfsSvnClient.UserControls
 
                     client.CheckOut(componentUri, arg.CheckOutPathDocumentEn);
                 }
-                               
+
                 foreach (SvnComponent component in arg.CompornentArray)
                 {
                     componentUri = new Uri(component.Path.Replace("^/", rootUri.AbsoluteUri));
@@ -397,6 +374,7 @@ namespace IfsSvnClient.UserControls
                             foreach (SvnListEventArgs project in nodeList)
                             {
                                 nodeItem = new ListBoxItem();
+                                nodeItem.Name = project.Name.Replace("-", "_").Replace(".", "_");
 
                                 treeItemStack = new StackPanel();
                                 treeItemStack.Orientation = Orientation.Horizontal;
@@ -451,7 +429,6 @@ namespace IfsSvnClient.UserControls
                     }
                 }
                 this.ButtonState = ButtonState.CheckOut;
-                this.Log("Done!", checkBoxShowLessInfor.IsChecked.Value);
             }
             catch (Exception ex)
             {
@@ -488,6 +465,7 @@ namespace IfsSvnClient.UserControls
                     foreach (SvnComponent component in componentList)
                     {
                         nodeItem = new ListBoxItem();
+                        nodeItem.Name = component.Name.Replace("-", "_").Replace(".", "_");
 
                         treeItemStack = new StackPanel();
                         treeItemStack.Orientation = Orientation.Horizontal;
@@ -783,5 +761,51 @@ namespace IfsSvnClient.UserControls
             {
             }
         }
+
+        #region Navigation
+
+        public void OnFragmentNavigation(FirstFloor.ModernUI.Windows.Navigation.FragmentNavigationEventArgs e)
+        {
+
+        }
+
+        public void OnNavigatedFrom(FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs e)
+        {
+
+        }
+
+        public void OnNavigatedTo(FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs e)
+        {
+            try
+            {
+                if (e.NavigationType == FirstFloor.ModernUI.Windows.Navigation.NavigationType.New)
+                {
+                    if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ServerUri) == false)
+                    {
+                        projectsUri = new SvnUriTarget(Properties.Settings.Default.ServerUri + "/projects");
+
+                        textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\";
+                        if (backgroundWorkerCheckOut.IsBusy == false)
+                        {
+                            progressBarMain.Visibility = System.Windows.Visibility.Visible;
+
+                            backgroundWorkerCheckOut.RunWorkerAsync(new CheckOutArguments(JobType.Load));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModernDialog.ShowMessage(ex.Message, "Error Loading Page", MessageBoxButton.OK);
+                logger.Error("Error Loading Page", ex);
+            }
+        }
+
+        public void OnNavigatingFrom(FirstFloor.ModernUI.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+
+        }
+
+        #endregion
     }
 }

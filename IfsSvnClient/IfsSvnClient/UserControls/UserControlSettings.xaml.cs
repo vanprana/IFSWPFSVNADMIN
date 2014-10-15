@@ -16,13 +16,14 @@ using FirstFloor.ModernUI.Windows.Controls;
 using System.Deployment.Application;
 using System.IO;
 using NLog;
+using FirstFloor.ModernUI.Windows;
 
 namespace IfsSvnClient.UserControls
 {
     /// <summary>
     /// Interaction logic for UserControlSettings.xaml
     /// </summary>
-    public partial class UserControlSettings : UserControl
+    public partial class UserControlSettings : UserControl, IContent
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -70,26 +71,7 @@ namespace IfsSvnClient.UserControls
                 logger.Error("Error contacting support", ex);
             }
         }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                myNotifierLync = new NotifierLync();
-
-                if (ApplicationDeployment.IsNetworkDeployed)
-                {
-                    Version ProductVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion;
-
-                    textBoxPublishVersion.Text = ProductVersion.ToString();
-                }
-            }
-            catch (Exception)
-            {
-                buttonContactSupport.IsEnabled = false;
-            }
-        }
-
+        
         private void button_BackUpLog_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -146,5 +128,46 @@ namespace IfsSvnClient.UserControls
                 logger.Error("Error backing up logs", ex);
             }
         }
+
+        #region Navigation
+
+        public void OnFragmentNavigation(FirstFloor.ModernUI.Windows.Navigation.FragmentNavigationEventArgs e)
+        {
+           
+        }
+
+        public void OnNavigatedFrom(FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs e)
+        {
+           
+        }
+
+        public void OnNavigatedTo(FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs e)
+        {
+            try
+            {
+                if (e.NavigationType == FirstFloor.ModernUI.Windows.Navigation.NavigationType.New)
+                {
+                    myNotifierLync = new NotifierLync();
+
+                    if (ApplicationDeployment.IsNetworkDeployed)
+                    {
+                        Version ProductVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion;
+
+                        textBoxPublishVersion.Text = ProductVersion.ToString();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                buttonContactSupport.IsEnabled = false;
+            }
+        }
+
+        public void OnNavigatingFrom(FirstFloor.ModernUI.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+           
+        }
+
+        #endregion
     }
 }

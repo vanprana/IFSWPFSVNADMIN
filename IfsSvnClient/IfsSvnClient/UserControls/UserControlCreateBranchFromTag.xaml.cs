@@ -15,6 +15,7 @@ using SharpSvn;
 using IfsSvnClient.Classes;
 using System.ComponentModel;
 using FirstFloor.ModernUI.Windows.Controls;
+using FirstFloor.ModernUI.Windows;
 
 namespace IfsSvnClient.UserControls
 {
@@ -25,7 +26,7 @@ namespace IfsSvnClient.UserControls
     {
         private BackgroundWorker backgroundWorkerLoad;
         private delegate void backgroundWorkerLoad_RunWorkerCompletedDelegate(object sender, RunWorkerCompletedEventArgs e);
-        
+
         private SvnListEventArgs selectedTag;
 
         private IfsSvn myIfsSvn;
@@ -46,23 +47,6 @@ namespace IfsSvnClient.UserControls
         {
             this.selectedTag = tag;
             textBoxSelectedTag.Text = this.selectedTag.Name;
-        }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (backgroundWorkerLoad.IsBusy == false)
-                {
-                    progressBarMain.Visibility = System.Windows.Visibility.Visible;
-
-                    backgroundWorkerLoad.RunWorkerAsync(new TagArguments(JobType.LoadProjects));
-                }
-            }
-            catch (Exception ex)
-            {
-                ModernDialog.ShowMessage(ex.Message, "Error Loading", MessageBoxButton.OK);
-            }
         }
 
         private void backgroundWorkerLoad_DoWork(object sender, DoWorkEventArgs e)
@@ -167,7 +151,7 @@ namespace IfsSvnClient.UserControls
             }
         }
 
-        private  void SetNewBranchName()
+        private void SetNewBranchName()
         {
             textBoxBranchName.Text = myIfsSvn.GetNewBranchName(selectedTag, (comboBoxProjectList.SelectedItem as SvnProject).Name);
         }
@@ -175,8 +159,8 @@ namespace IfsSvnClient.UserControls
         private void comboBoxProjectList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
-            {                
-                if (comboBoxProjectList.SelectedItem != null && 
+            {
+                if (comboBoxProjectList.SelectedItem != null &&
                     comboBoxProjectList.SelectedItem is SvnProject)
                 {
                     this.SetNewBranchName();
@@ -184,7 +168,7 @@ namespace IfsSvnClient.UserControls
                 }
             }
             catch (Exception)
-            {         
+            {
             }
         }
 
@@ -213,6 +197,23 @@ namespace IfsSvnClient.UserControls
             catch (Exception ex)
             {
                 ModernDialog.ShowMessage(ex.Message, "Error Creating Branch", MessageBoxButton.OK);
+            }
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (backgroundWorkerLoad.IsBusy == false)
+                {
+                    progressBarMain.Visibility = System.Windows.Visibility.Visible;
+
+                    backgroundWorkerLoad.RunWorkerAsync(new TagArguments(JobType.LoadProjects));
+                }
+            }
+            catch (Exception ex)
+            {
+                ModernDialog.ShowMessage(ex.Message, "Error Loading", MessageBoxButton.OK);
             }
         }
     }

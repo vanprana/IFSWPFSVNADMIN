@@ -1,29 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using IfsSvnClient.Classes;
-using FirstFloor.ModernUI.Windows.Controls;
 using System.Deployment.Application;
 using System.IO;
+using System.Windows;
+using System.Windows.Controls;
+using FirstFloor.ModernUI.Windows.Controls;
+using IfsSvnClient.Classes;
 using NLog;
-using FirstFloor.ModernUI.Windows;
 
 namespace IfsSvnClient.UserControls
 {
     /// <summary>
     /// Interaction logic for UserControlSettings.xaml
     /// </summary>
-    public partial class UserControlSettings : UserControl, IContent
+    public partial class UserControlSettings : UserControl
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -32,6 +21,24 @@ namespace IfsSvnClient.UserControls
         public UserControlSettings()
         {
             InitializeComponent();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {                
+                if (ApplicationDeployment.IsNetworkDeployed)
+                {
+                    Version ProductVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion;
+
+                    textBoxPublishVersion.Text = ProductVersion.ToString();
+                }
+                myNotifierLync = new NotifierLync();
+            }
+            catch (Exception)
+            {
+                buttonContactSupport.IsEnabled = false;
+            }
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
@@ -71,7 +78,7 @@ namespace IfsSvnClient.UserControls
                 logger.Error("Error contacting support", ex);
             }
         }
-        
+
         private void button_BackUpLog_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -127,47 +134,6 @@ namespace IfsSvnClient.UserControls
                 ModernDialog.ShowMessage(ex.Message, "Error backing up logs", MessageBoxButton.OK);
                 logger.Error("Error backing up logs", ex);
             }
-        }
-
-        #region Navigation
-
-        public void OnFragmentNavigation(FirstFloor.ModernUI.Windows.Navigation.FragmentNavigationEventArgs e)
-        {
-           
-        }
-
-        public void OnNavigatedFrom(FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs e)
-        {
-           
-        }
-
-        public void OnNavigatedTo(FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs e)
-        {
-            try
-            {
-                if (e.NavigationType == FirstFloor.ModernUI.Windows.Navigation.NavigationType.New)
-                {
-                    myNotifierLync = new NotifierLync();
-
-                    if (ApplicationDeployment.IsNetworkDeployed)
-                    {
-                        Version ProductVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion;
-
-                        textBoxPublishVersion.Text = ProductVersion.ToString();
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                buttonContactSupport.IsEnabled = false;
-            }
-        }
-
-        public void OnNavigatingFrom(FirstFloor.ModernUI.Windows.Navigation.NavigatingCancelEventArgs e)
-        {
-           
-        }
-
-        #endregion
+        }               
     }
 }

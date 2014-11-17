@@ -426,6 +426,7 @@ namespace IfsSvnClient.UserControls
                                 this.SelectCheckedOutComponents();
                             }
                         }
+                        this.Log("Done.", true);
                     }
                 }
                 this.ButtonState = ButtonState.CheckOut;

@@ -8,7 +8,8 @@
              d:DesignWidth="719"             
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:p="clr-namespace:IfsSvnClient.Properties" 
-             xmlns:controls="clr-namespace:Microsoft.Lync.Controls;assembly=Microsoft.Lync.Controls">
+             xmlns:controls="clr-namespace:Microsoft.Lync.Controls;assembly=Microsoft.Lync.Controls" 
+             Loaded="UserControl_Loaded">
     <Grid Style="{StaticResource ContentRoot}" Margin="0">
         <Grid.Resources>
             <controls:ConversationContextualInfo 

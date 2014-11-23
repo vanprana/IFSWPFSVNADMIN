@@ -1,25 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.ComponentModel;
+using FirstFloor.ModernUI.Windows;
+using FirstFloor.ModernUI.Windows.Controls;
 using IfsSvnClient.Classes;
+using NLog;
 using SharpSvn;
 using SharpSvn.UI;
-using System.Collections.ObjectModel;
-using FirstFloor.ModernUI.Windows.Controls;
-using System.IO;
-using NLog;
-using FirstFloor.ModernUI.Windows;
 
 namespace IfsSvnClient.UserControls
 {
@@ -31,10 +26,14 @@ namespace IfsSvnClient.UserControls
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private BackgroundWorker backgroundWorkerCheckOut;
+
         private delegate void backgroundWorkerCheckOut_RunWorkerCompletedDelegate(object sender, RunWorkerCompletedEventArgs e);
+
         private bool _cancelCheckout = false;
         private SvnUriTarget projectsUri;
+
         private delegate void client_NotifyDelegate(object sender, SvnNotifyEventArgs e);
+
         private delegate void logDelegate(string message, bool showLessLogInformation);
 
         private BitmapImage projectImage;
@@ -191,7 +190,7 @@ namespace IfsSvnClient.UserControls
 
                 Uri rootUri = client.GetRepositoryRoot(arg.ProjectWorkspaceUri);
 
-                this.Log("Starting Checking Out at " + DateTime.Now.ToString(), arg.ShowLessLogInformation);
+                this.Log("Starting Checking Out at " + DateTime.Now.ToString(), false);
 
                 client.CheckOut(arg.ProjectNbprojectUri, arg.CheckOutPathNbproject, new SvnCheckOutArgs() { ThrowOnError = false, IgnoreExternals = true });
 
@@ -304,7 +303,74 @@ namespace IfsSvnClient.UserControls
             }
             catch (Exception)
             {
+            }
+        }
 
+        private void LoadTree(List<SvnListEventArgs> nodeList)
+        {
+            if (nodeList != null && nodeList.Count > 0)
+            {
+                nodeList.RemoveAt(0);
+
+                StackPanel treeItemStack;
+                TextBlock lbl;
+                Image treeItemImage;
+                ListBoxItem nodeItem;
+                List<ListBoxItem> nodeItemList = new List<ListBoxItem>();
+                foreach (SvnListEventArgs project in nodeList)
+                {
+                    nodeItem = new ListBoxItem();
+                    nodeItem.Name = project.Name.Replace("-", "_").Replace(".", "_");
+
+                    treeItemStack = new StackPanel();
+                    treeItemStack.Orientation = Orientation.Horizontal;
+
+                    lbl = new TextBlock();
+                    lbl.Text = project.Name;
+                    lbl.Margin = new Thickness(3, 1, 3, 1);
+
+                    treeItemImage = new Image();
+                    treeItemImage.Source = projectImage;
+                    treeItemImage.Margin = new Thickness(3, 1, 3, 1);
+
+                    treeItemStack.Children.Add(treeItemImage);
+                    treeItemStack.Children.Add(lbl);
+
+                    nodeItem.Content = treeItemStack;
+                    nodeItem.Tag = new SvnProject(project);
+
+                    nodeItemList.Add(nodeItem);
+                }
+
+                if (nodeItemList.Count > 0)
+                {
+                    listBoxProjectList.ItemsSource = nodeItemList;
+                }
+
+                if (string.IsNullOrWhiteSpace(Properties.Settings.Default.SelectedProject) == false &&
+                    Properties.Settings.Default.SelectedProject != "ProjectsRoot")
+                {
+                    foreach (ListBoxItem item in listBoxProjectList.Items)
+                    {
+                        if ((item.Tag as SvnProject).Name == Properties.Settings.Default.SelectedProject)
+                        {
+                            listBoxProjectList.SelectedItem = item;
+                            listBoxProjectList.ScrollIntoView(item);
+                            break;
+                        }
+                    }
+                }
+
+                if (Properties.Settings.Default.RememberFiltering)
+                {
+                    textBoxProjectsFilter.Text = Properties.Settings.Default.TextBoxProjectsFilter_text;
+                    textBoxComponentFilter.Text = Properties.Settings.Default.TextBoxComponentFilter_text;
+                }
+
+                if (Properties.Settings.Default.SelectCheckedOutAtStartUp)
+                {
+                    this.SelectCheckedOutComponents();
+                }
             }
         }
 
@@ -327,11 +393,11 @@ namespace IfsSvnClient.UserControls
                     else if (arg.Type == JobType.CheckOut)
                     {
                         this.CheckOutProject(arg);
-                        e.Result = null;
+                        e.Result = JobType.CheckOut;
                     }
                 }
 
-                // If the operation was canceled by the user, 
+                // If the operation was canceled by the user,
                 // set the DoWorkEventArgs.Cancel property to true.
                 if (worker.CancellationPending)
                 {
@@ -360,73 +426,15 @@ namespace IfsSvnClient.UserControls
                 {
                     if (e.Result != null)
                     {
-                        List<SvnListEventArgs> nodeList = e.Result as List<SvnListEventArgs>;
-
-                        if (nodeList != null && nodeList.Count > 0)
+                        if (e.Result is List<SvnListEventArgs>)
                         {
-                            nodeList.RemoveAt(0);
-
-                            StackPanel treeItemStack;
-                            TextBlock lbl;
-                            Image treeItemImage;
-                            ListBoxItem nodeItem;
-                            List<ListBoxItem> nodeItemList = new List<ListBoxItem>();
-                            foreach (SvnListEventArgs project in nodeList)
-                            {
-                                nodeItem = new ListBoxItem();
-                                nodeItem.Name = project.Name.Replace("-", "_").Replace(".", "_");
-
-                                treeItemStack = new StackPanel();
-                                treeItemStack.Orientation = Orientation.Horizontal;
-
-                                lbl = new TextBlock();
-                                lbl.Text = project.Name;
-                                lbl.Margin = new Thickness(3, 1, 3, 1);
-
-                                treeItemImage = new Image();
-                                treeItemImage.Source = projectImage;
-                                treeItemImage.Margin = new Thickness(3, 1, 3, 1);
-
-                                treeItemStack.Children.Add(treeItemImage);
-                                treeItemStack.Children.Add(lbl);
-
-                                nodeItem.Content = treeItemStack;
-                                nodeItem.Tag = new SvnProject(project);
-
-                                nodeItemList.Add(nodeItem);
-                            }
-
-                            if (nodeItemList.Count > 0)
-                            {
-                                listBoxProjectList.ItemsSource = nodeItemList;
-                            }
-
-                            if (string.IsNullOrWhiteSpace(Properties.Settings.Default.SelectedProject) == false &&
-                                Properties.Settings.Default.SelectedProject != "ProjectsRoot")
-                            {
-                                foreach (ListBoxItem item in listBoxProjectList.Items)
-                                {
-                                    if ((item.Tag as SvnProject).Name == Properties.Settings.Default.SelectedProject)
-                                    {
-                                        listBoxProjectList.SelectedItem = item;
-                                        listBoxProjectList.ScrollIntoView(item);
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (Properties.Settings.Default.RememberFiltering)
-                            {
-                                textBoxProjectsFilter.Text = Properties.Settings.Default.TextBoxProjectsFilter_text;
-                                textBoxComponentFilter.Text = Properties.Settings.Default.TextBoxComponentFilter_text;
-                            }
-
-                            if (Properties.Settings.Default.SelectCheckedOutAtStartUp)
-                            {
-                                this.SelectCheckedOutComponents();
-                            }
+                            this.LoadTree(e.Result as List<SvnListEventArgs>);
+                            this.Log("Every thing is loaded now.", checkBoxShowLessInfor.IsChecked.Value);
                         }
-                        this.Log("Done.", true);
+                        else
+                        {
+                            this.Log("Finished Checking Out.", false);
+                        }
                     }
                 }
                 this.ButtonState = ButtonState.CheckOut;
@@ -767,12 +775,10 @@ namespace IfsSvnClient.UserControls
 
         public void OnFragmentNavigation(FirstFloor.ModernUI.Windows.Navigation.FragmentNavigationEventArgs e)
         {
-
         }
 
         public void OnNavigatedFrom(FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs e)
         {
-
         }
 
         public void OnNavigatedTo(FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs e)
@@ -804,7 +810,6 @@ namespace IfsSvnClient.UserControls
 
         public void OnNavigatingFrom(FirstFloor.ModernUI.Windows.Navigation.NavigatingCancelEventArgs e)
         {
-
         }
 
         #endregion

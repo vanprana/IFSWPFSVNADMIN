@@ -141,7 +141,7 @@ namespace IfsSvnClient.Classes
                     SvnUIBindArgs bindArgs = new SvnUIBindArgs();
                     SvnUI.Bind(client, bindArgs);
 
-                    SvnUriTarget projectUri = new SvnUriTarget(seletedProject.Path + Properties.Settings.Default.ServerWorkSpace + "/");
+                    SvnUriTarget projectUri = new SvnUriTarget(seletedProject.Path + Properties.Resources.CheckOutPath_WorkSpace + "/");
 
                     string components;
                     if (client.TryGetProperty(projectUri, SvnPropertyNames.SvnExternals, out components))
@@ -178,7 +178,7 @@ namespace IfsSvnClient.Classes
                     SvnUIBindArgs bindArgs = new SvnUIBindArgs();
                     SvnUI.Bind(client, bindArgs);
 
-                    SvnUriTarget projectUri = new SvnUriTarget(seletedProject.Path + Properties.Settings.Default.ServerDocumentation + "/");
+                    SvnUriTarget projectUri = new SvnUriTarget(seletedProject.Path + Properties.Resources.CheckOutPath_Documentation + "/");
 
                     string components;
                     if (client.TryGetProperty(projectUri, SvnPropertyNames.SvnExternals, out components))

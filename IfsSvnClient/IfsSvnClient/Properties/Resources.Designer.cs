@@ -91,6 +91,33 @@ namespace IfsSvnClient.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to documentation.
+        /// </summary>
+        internal static string CheckOutPath_Documentation {
+            get {
+                return ResourceManager.GetString("CheckOutPath_Documentation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to nbproject.
+        /// </summary>
+        internal static string CheckOutPath_NbProject {
+            get {
+                return ResourceManager.GetString("CheckOutPath_NbProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to workspace.
+        /// </summary>
+        internal static string CheckOutPath_WorkSpace {
+            get {
+                return ResourceManager.GetString("CheckOutPath_WorkSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap clear_1616 {
@@ -121,12 +148,48 @@ namespace IfsSvnClient.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Houston, we have a problem!.
+        /// </summary>
+        internal static string HeaderMessage {
+            get {
+                return ResourceManager.GetString("HeaderMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap opened_folder {
             get {
                 object obj = ResourceManager.GetObject("opened_folder", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other.
+        /// </summary>
+        internal static string ProductGroup_Other {
+            get {
+                return ResourceManager.GetString("ProductGroup_Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Projects.
+        /// </summary>
+        internal static string ProductGroup_Projects {
+            get {
+                return ResourceManager.GetString("ProductGroup_Projects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service &amp; Asset.
+        /// </summary>
+        internal static string ProductGroup_ServiceAsset {
+            get {
+                return ResourceManager.GetString("ProductGroup_ServiceAsset", resourceCulture);
             }
         }
         
@@ -157,6 +220,60 @@ namespace IfsSvnClient.Properties {
             get {
                 object obj = ResourceManager.GetObject("select_row_1616", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ^/documentation/onlinedocframework/trunk.
+        /// </summary>
+        internal static string ServerDocumentationOnlinedocframework {
+            get {
+                return ResourceManager.GetString("ServerDocumentationOnlinedocframework", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sri Lanka | https://cmbsvn01/svn/ifsapp.
+        /// </summary>
+        internal static string ServerUri_SriLanka {
+            get {
+                return ResourceManager.GetString("ServerUri_SriLanka", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sweden | https://lkpsvn01/svn/ifsapp.
+        /// </summary>
+        internal static string ServerUri_Sweden {
+            get {
+                return ResourceManager.GetString("ServerUri_Sweden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to tharindu.thudugala@ifsworld.com.
+        /// </summary>
+        internal static string SupportPerson_Other {
+            get {
+                return ResourceManager.GetString("SupportPerson_Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to peumali.sudasinghe@ifsworld.com.
+        /// </summary>
+        internal static string SupportPerson_Projects {
+            get {
+                return ResourceManager.GetString("SupportPerson_Projects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to martina.chethani@ifsworld.com.
+        /// </summary>
+        internal static string SupportPerson_ServiceAsset {
+            get {
+                return ResourceManager.GetString("SupportPerson_ServiceAsset", resourceCulture);
             }
         }
     }

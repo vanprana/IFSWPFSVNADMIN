@@ -1,16 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using FirstFloor.ModernUI.Windows;
 using FirstFloor.ModernUI.Windows.Controls;
 
@@ -28,12 +18,10 @@ namespace IfsSvnClient.UserControls
 
         public void OnFragmentNavigation(FirstFloor.ModernUI.Windows.Navigation.FragmentNavigationEventArgs e)
         {
-
         }
 
         public void OnNavigatedFrom(FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs e)
         {
-
         }
 
         public void OnNavigatedTo(FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs e)
@@ -42,15 +30,39 @@ namespace IfsSvnClient.UserControls
             {
                 if (e.NavigationType == FirstFloor.ModernUI.Windows.Navigation.NavigationType.New)
                 {
+                    comboBoxProductGroupList.Items.Add(Properties.Resources.ProductGroup_Projects);
+                    comboBoxProductGroupList.Items.Add(Properties.Resources.ProductGroup_ServiceAsset);
+                    comboBoxProductGroupList.Items.Add(Properties.Resources.ProductGroup_Other);
+
+                    comboBoxServerUriList.Items.Add(Properties.Resources.ServerUri_SriLanka);
+                    comboBoxServerUriList.Items.Add(Properties.Resources.ServerUri_Sweden);
+
                     if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ServerUri) == false)
                     {
-                        foreach (object item in comboBoxServerUriList.Items)
+                        if (Properties.Resources.ServerUri_SriLanka.Contains(Properties.Settings.Default.ServerUri))
                         {
-                            if (item.ToString().Contains(Properties.Settings.Default.ServerUri))
-                            {
-                                comboBoxServerUriList.SelectedValue = item;
-                                break;
-                            }
+                            comboBoxServerUriList.SelectedValue = Properties.Resources.ServerUri_SriLanka;
+                        }
+                        else if (Properties.Resources.ServerUri_Sweden.Contains(Properties.Settings.Default.ServerUri))
+                        {
+                            comboBoxServerUriList.SelectedValue = Properties.Resources.ServerUri_Sweden;
+                        }
+                    }
+                
+
+                    if (string.IsNullOrWhiteSpace(Properties.Settings.Default.SupportPerson) == false)
+                    {
+                        if (Properties.Settings.Default.SupportPerson == Properties.Resources.SupportPerson_Projects)
+                        {
+                            comboBoxProductGroupList.SelectedValue = Properties.Resources.ProductGroup_Projects;
+                        }
+                        else if (Properties.Settings.Default.SupportPerson == Properties.Resources.SupportPerson_ServiceAsset)
+                        {
+                            comboBoxProductGroupList.SelectedValue = Properties.Resources.ProductGroup_ServiceAsset;
+                        }
+                        else if (Properties.Settings.Default.SupportPerson == Properties.Resources.SupportPerson_Other)
+                        {
+                            comboBoxProductGroupList.SelectedValue = Properties.Resources.ProductGroup_Other;
                         }
                     }
                 }
@@ -70,26 +82,44 @@ namespace IfsSvnClient.UserControls
                     ModernDialog.ShowMessage("Please Select a Server.", "Server Select", MessageBoxButton.OK);
                     e.Cancel = true;
                 }
+                if (string.IsNullOrWhiteSpace(Properties.Settings.Default.SupportPerson))
+                {
+                    ModernDialog.ShowMessage("Please Select your Product Group.", "Product Group Select", MessageBoxButton.OK);
+                    e.Cancel = true;
+                }
             }
             catch (Exception)
             {
-
             }
         }
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
             try
-            {                
+            {
                 if (comboBoxServerUriList.SelectedValue != null)
-                {
+                {                    
                     Properties.Settings.Default.ServerUri = comboBoxServerUriList.SelectedValue.ToString().Split(new char[] { '|' })[1].Trim();
+
+                    string productGroup = comboBoxProductGroupList.SelectedValue.ToString();
+                    if (productGroup == Properties.Resources.ProductGroup_Projects)
+                    {
+                        Properties.Settings.Default.SupportPerson = Properties.Resources.SupportPerson_Projects;
+                    }
+                    else if (productGroup == Properties.Resources.ProductGroup_ServiceAsset)
+                    {
+                        Properties.Settings.Default.SupportPerson = Properties.Resources.SupportPerson_ServiceAsset;
+                    }
+                    else if (productGroup == Properties.Resources.ProductGroup_Other)
+                    {
+                        Properties.Settings.Default.SupportPerson = Properties.Resources.SupportPerson_Other;
+                    }
 
                     BBCodeBlock bs = new BBCodeBlock();
 
                     bs.LinkNavigator.Navigate(new Uri("/UserControls/UserControlCheckOut.xaml", UriKind.Relative), this);
                 }
-                else 
+                else
                 {
                     ModernDialog.ShowMessage("Please Select a Server.", "Server Select", MessageBoxButton.OK);
                 }

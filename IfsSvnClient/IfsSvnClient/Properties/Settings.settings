@@ -5,26 +5,17 @@
     <Setting Name="ProjectRoot" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\SvnCheckOut</Value>
     </Setting>
-    <Setting Name="ServerWorkSpace" Type="System.String" Scope="User">
-      <Value Profile="(Default)">workspace</Value>
-    </Setting>
     <Setting Name="SelectedProject" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Pattern" Type="System.String" Scope="User">
-      <Value Profile="(Default)">*Converge*</Value>
+      <Value Profile="(Default)">*pearl*</Value>
     </Setting>
     <Setting Name="SelectedProjectForBranchCreate" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SupportPerson" Type="System.String" Scope="User">
-      <Value Profile="(Default)">peumali.sudasinghe@ifsworld.com</Value>
-    </Setting>
-    <Setting Name="HeaderMessage" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Houston, we have a problem!</Value>
-    </Setting>
-    <Setting Name="ServerNbProject" Type="System.String" Scope="User">
-      <Value Profile="(Default)">nbproject</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="RememberFiltering" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -38,21 +29,8 @@
     <Setting Name="TextBoxComponentFilter_text" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ServerDocumentation" Type="System.String" Scope="User">
-      <Value Profile="(Default)">documentation</Value>
-    </Setting>
-    <Setting Name="ServerUriList" Type="System.Collections.Specialized.StringCollection" Scope="User">
-      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;string&gt;Sri Lanka | https://cmbsvn01/svn/ifsapp&lt;/string&gt;
-  &lt;string&gt;Sweden | https://lkpsvn01/svn/ifsapp&lt;/string&gt;
-&lt;/ArrayOfString&gt;</Value>
-    </Setting>
     <Setting Name="ServerUri" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="ServerDocumentationOnlinedocframework" Type="System.String" Scope="User">
-      <Value Profile="(Default)">^/documentation/onlinedocframework/trunk</Value>
     </Setting>
   </Settings>
 </SettingsFile>

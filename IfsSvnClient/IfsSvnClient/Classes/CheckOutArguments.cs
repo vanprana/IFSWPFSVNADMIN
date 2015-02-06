@@ -31,24 +31,24 @@ namespace IfsSvnClient.Classes
             this.ShowLessLogInformation = showLessLogInformation;
             this.CheckOutPathProject = checkOutPathProject;
 
-            this.ProjectNbprojectUri = new Uri(projectPath + Properties.Settings.Default.ServerNbProject);
-            this.ProjectDocumentUri = new Uri(projectPath + Properties.Settings.Default.ServerDocumentation);
-            this.ProjectWorkspaceUri = new Uri(projectPath + Properties.Settings.Default.ServerWorkSpace);
+            this.ProjectNbprojectUri = new Uri(projectPath + Properties.Resources.CheckOutPath_NbProject);
+            this.ProjectDocumentUri = new Uri(projectPath + Properties.Resources.CheckOutPath_Documentation);
+            this.ProjectWorkspaceUri = new Uri(projectPath + Properties.Resources.CheckOutPath_WorkSpace);
             
             this.CheckOutPathNbproject = this.CheckOutPathProject;
             this.CheckOutPathDocument = this.CheckOutPathProject;
             this.CheckOutPathWorkspace = this.CheckOutPathProject;
             if (this.CheckOutPathProject.EndsWith(@"\"))
             {
-                this.CheckOutPathNbproject += Properties.Settings.Default.ServerNbProject;
-                this.CheckOutPathDocument += Properties.Settings.Default.ServerDocumentation;
-                this.CheckOutPathWorkspace += Properties.Settings.Default.ServerWorkSpace;
+                this.CheckOutPathNbproject += Properties.Resources.CheckOutPath_NbProject;
+                this.CheckOutPathDocument += Properties.Resources.CheckOutPath_Documentation;
+                this.CheckOutPathWorkspace += Properties.Resources.CheckOutPath_WorkSpace;
             }
             else
             {
-                this.CheckOutPathNbproject += @"\" + Properties.Settings.Default.ServerNbProject;
-                this.CheckOutPathDocument += @"\" + Properties.Settings.Default.ServerDocumentation;
-                this.CheckOutPathWorkspace += @"\" + Properties.Settings.Default.ServerWorkSpace;
+                this.CheckOutPathNbproject += @"\" + Properties.Resources.CheckOutPath_NbProject;
+                this.CheckOutPathDocument += @"\" + Properties.Resources.CheckOutPath_Documentation;
+                this.CheckOutPathWorkspace += @"\" + Properties.Resources.CheckOutPath_WorkSpace;
             }
             this.CheckOutPathNbproject += @"\";
             this.CheckOutPathDocument += @"\";

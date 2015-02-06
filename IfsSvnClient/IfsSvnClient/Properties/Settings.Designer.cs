@@ -37,18 +37,6 @@ namespace IfsSvnClient.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("workspace")]
-        public string ServerWorkSpace {
-            get {
-                return ((string)(this["ServerWorkSpace"]));
-            }
-            set {
-                this["ServerWorkSpace"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SelectedProject {
             get {
@@ -61,7 +49,7 @@ namespace IfsSvnClient.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("*Converge*")]
+        [global::System.Configuration.DefaultSettingValueAttribute("*pearl*")]
         public string Pattern {
             get {
                 return ((string)(this["Pattern"]));
@@ -85,37 +73,13 @@ namespace IfsSvnClient.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("peumali.sudasinghe@ifsworld.com")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SupportPerson {
             get {
                 return ((string)(this["SupportPerson"]));
             }
             set {
                 this["SupportPerson"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Houston, we have a problem!")]
-        public string HeaderMessage {
-            get {
-                return ((string)(this["HeaderMessage"]));
-            }
-            set {
-                this["HeaderMessage"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("nbproject")]
-        public string ServerNbProject {
-            get {
-                return ((string)(this["ServerNbProject"]));
-            }
-            set {
-                this["ServerNbProject"] = value;
             }
         }
         
@@ -169,34 +133,6 @@ namespace IfsSvnClient.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("documentation")]
-        public string ServerDocumentation {
-            get {
-                return ((string)(this["ServerDocumentation"]));
-            }
-            set {
-                this["ServerDocumentation"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
-<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>Sri Lanka | https://cmbsvn01/svn/ifsapp</string>
-  <string>Sweden | https://lkpsvn01/svn/ifsapp</string>
-</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection ServerUriList {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ServerUriList"]));
-            }
-            set {
-                this["ServerUriList"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ServerUri {
             get {
@@ -204,18 +140,6 @@ namespace IfsSvnClient.Properties {
             }
             set {
                 this["ServerUri"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("^/documentation/onlinedocframework/trunk")]
-        public string ServerDocumentationOnlinedocframework {
-            get {
-                return ((string)(this["ServerDocumentationOnlinedocframework"]));
-            }
-            set {
-                this["ServerDocumentationOnlinedocframework"] = value;
             }
         }
     }

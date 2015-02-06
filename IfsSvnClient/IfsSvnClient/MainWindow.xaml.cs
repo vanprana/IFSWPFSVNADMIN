@@ -42,7 +42,8 @@ namespace IfsSvnClient
         {
             try
             {                                                
-                if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ServerUri))
+                if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ServerUri) ||
+                    string.IsNullOrWhiteSpace(Properties.Settings.Default.SupportPerson))
                 {
                     this.ContentSource = linkSVNServer.Source;
                 }

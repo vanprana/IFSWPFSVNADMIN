@@ -202,7 +202,7 @@ namespace IfsSvnClient.UserControls
                 Uri componentUri;
                 if (arg.HasDocCompornents)
                 {
-                    componentUri = new Uri(Properties.Settings.Default.ServerDocumentationOnlinedocframework.Replace("^/", rootUri.AbsoluteUri));
+                    componentUri = new Uri(Properties.Resources.ServerDocumentationOnlinedocframework.Replace("^/", rootUri.AbsoluteUri));
 
                     client.CheckOut(componentUri, arg.CheckOutPathDocumentEn);
                 }
@@ -501,7 +501,7 @@ namespace IfsSvnClient.UserControls
                         listBoxComponents.ItemsSource = nodeItemList;
                     }
 
-                    textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\" + seletedProject.Name + @"\" + Properties.Settings.Default.ServerWorkSpace;
+                    textBoxWorkSpace.Text = textBoxProjectRoot.Text + @"\" + seletedProject.Name + @"\" + Properties.Resources.CheckOutPath_WorkSpace;
 
                     Properties.Settings.Default.SelectedProject = seletedProject.Name;
 
@@ -599,7 +599,7 @@ namespace IfsSvnClient.UserControls
                 {
                     if (seletedNode.Tag is SvnProject)
                     {
-                        textBoxWorkSpace.Text += (seletedNode.Tag as SvnProject).Name + @"\" + Properties.Settings.Default.ServerWorkSpace;
+                        textBoxWorkSpace.Text += (seletedNode.Tag as SvnProject).Name + @"\" + Properties.Resources.CheckOutPath_WorkSpace;
                     }
                 }
             }

@@ -14,11 +14,15 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="1" Margin="3" Content="Please Select IFS SVN Server URI:" Name="label1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" />
-        <Label Grid.Row="2" Margin="3" Content="Select Sri Lankan URL if you are in Sri Lanka else use the Sweden one"/>
-        <ComboBox x:Name="comboBoxServerUriList" Grid.Row="3" Margin="3" ItemsSource="{Binding Source={x:Static my:Settings.Default}, Path=ServerUriList, Mode=OneTime}" FontSize="20" />
-        <Button Grid.Row="4" Content="OK"  HorizontalAlignment="Right" Name="buttonOk" Margin="3" Click="buttonOk_Click" />
+        <Label Grid.Row="1" Margin="3" Content="Please Select Product Group:" Name="label1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" />
+        <ComboBox Grid.Row="2" x:Name="comboBoxProductGroupList" Margin="3" FontSize="20" />
+        <Label Grid.Row="3" Margin="3" Content="Please Select IFS SVN Server URI:" Name="label2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" />
+        <Label Grid.Row="4" Margin="3" Content="Select Sri Lankan URL if you are in Sri Lanka else use the Sweden one"/>
+        <ComboBox Grid.Row="5" x:Name="comboBoxServerUriList" Margin="3" FontSize="20" />
+        <Button Grid.Row="6" Content="OK"  HorizontalAlignment="Right" Name="buttonOk" Margin="3" Click="buttonOk_Click" />
     </Grid>
 </UserControl>

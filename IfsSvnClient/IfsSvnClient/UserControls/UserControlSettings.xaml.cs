@@ -67,7 +67,7 @@ namespace IfsSvnClient.UserControls
                                                               MessageBoxButton.YesNo);
                     if (contact == MessageBoxResult.Yes)
                     {
-                        myNotifierLync.SendMessage(Properties.Settings.Default.HeaderMessage);
+                        myNotifierLync.SendMessage(Properties.Resources.HeaderMessage);
                     }
                 }
                 logger.Info("buttonContactSupport: {0}", Properties.Settings.Default.SupportPerson);

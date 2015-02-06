@@ -32,7 +32,7 @@ namespace IfsSvnClient.Classes
 
         private void SetType()
         {
-            if (this.Path.Contains(Properties.Settings.Default.ServerDocumentation))
+            if (this.Path.Contains(Properties.Resources.CheckOutPath_Documentation))
             {
                 this.Type = SvnComponentType.Document;
             }

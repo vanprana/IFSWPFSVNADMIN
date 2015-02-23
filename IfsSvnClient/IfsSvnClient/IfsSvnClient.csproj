@@ -102,13 +102,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NLog.3.2.0.0\lib\net45\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="SharpSvn, Version=1.8011.3401.63, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=AMD64">
+    <Reference Include="SharpSvn, Version=1.8011.3473.77, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SharpSvn.1.8-x64.1.8011.3401.63\lib\net40\SharpSvn.dll</HintPath>
+      <HintPath>..\packages\SharpSvn.1.8-x64.1.8011.3473.77\lib\net40\SharpSvn.dll</HintPath>
     </Reference>
-    <Reference Include="SharpSvn.UI, Version=1.8011.3401.63, Culture=neutral, PublicKeyToken=33789aa53ca44aa9, processorArchitecture=MSIL">
+    <Reference Include="SharpSvn.UI, Version=1.8011.3473.77, Culture=neutral, PublicKeyToken=33789aa53ca44aa9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SharpSvn.1.8-x64.1.8011.3401.63\lib\net40\SharpSvn.UI.dll</HintPath>
+      <HintPath>..\packages\SharpSvn.1.8-x64.1.8011.3473.77\lib\net40\SharpSvn.UI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

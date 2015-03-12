@@ -5,5 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600">
-    <Grid></Grid>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Button x:Name="buttonShow" Content="Show" Width="75" Click="buttonShow_Click" HorizontalAlignment="Right"/>
+        <DataGrid x:Name="dataGridComponentTable" AutoGenerateColumns="False" Grid.Row="1" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Component" IsReadOnly="True" Binding="{Binding Key}"/>
+                <DataGridTextColumn Header="Static List" Binding="{Binding Value}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <ProgressBar Grid.Row="2" Height="20" Name="progressBarSearch" IsIndeterminate="False" />
+    </Grid>
 </UserControl>

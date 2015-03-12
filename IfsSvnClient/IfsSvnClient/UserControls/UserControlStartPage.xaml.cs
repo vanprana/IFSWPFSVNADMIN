@@ -30,12 +30,17 @@ namespace IfsSvnClient.UserControls
             {
                 if (e.NavigationType == FirstFloor.ModernUI.Windows.Navigation.NavigationType.New)
                 {
-                    comboBoxProductGroupList.Items.Add(Properties.Resources.ProductGroup_Projects);
-                    comboBoxProductGroupList.Items.Add(Properties.Resources.ProductGroup_ServiceAsset);
-                    comboBoxProductGroupList.Items.Add(Properties.Resources.ProductGroup_Other);
-
-                    comboBoxServerUriList.Items.Add(Properties.Resources.ServerUri_SriLanka);
-                    comboBoxServerUriList.Items.Add(Properties.Resources.ServerUri_Sweden);
+                    if (comboBoxProductGroupList.HasItems == false)
+                    {
+                        comboBoxProductGroupList.Items.Add(Properties.Resources.ProductGroup_Projects);
+                        comboBoxProductGroupList.Items.Add(Properties.Resources.ProductGroup_ServiceAsset);
+                        comboBoxProductGroupList.Items.Add(Properties.Resources.ProductGroup_Other);
+                    }
+                    if (comboBoxServerUriList.HasItems == false)
+                    {
+                        comboBoxServerUriList.Items.Add(Properties.Resources.ServerUri_SriLanka);
+                        comboBoxServerUriList.Items.Add(Properties.Resources.ServerUri_Sweden);
+                    }
 
                     if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ServerUri) == false)
                     {

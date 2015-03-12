@@ -48,6 +48,7 @@ namespace IfsSvnClient.UserControls
                     SearchArguments arg = new SearchArguments(Properties.Settings.Default.ServerUri);
                     progressBarSearch.Value = 0;
                     buttonShow.Content = "Cancel";
+                    buttonUnion.IsEnabled = false;
 
                     backgroundWorkerFind.RunWorkerAsync(arg);
                 }
@@ -160,7 +161,6 @@ namespace IfsSvnClient.UserControls
                                         }
                                     }
 
-                                    //arg.ComponentDictionary.Add(component.Name, string.Join("; ", componentStaticList));
                                     arg.ComponentDictionary.Add(component.Name, componentStaticList);
                                 }
                             }
@@ -194,6 +194,7 @@ namespace IfsSvnClient.UserControls
                         foreach (KeyValuePair<string, List<string>> item in arg.ComponentDictionary)
                         {
                             staticComponentList = this.GetStaticComponentList(item.Key, arg.ComponentDictionary);
+                            staticComponentList.Sort();
 
                             view.Add(item.Key, string.Join("; ", staticComponentList));
                         }
@@ -208,6 +209,7 @@ namespace IfsSvnClient.UserControls
                 finally
                 {
                     buttonShow.Content = "Show";
+                    buttonUnion.IsEnabled = true;
                 }
             }
         }
@@ -251,6 +253,37 @@ namespace IfsSvnClient.UserControls
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        private void buttonUnion_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                List<string> unionList = new List<string>();
+                string[] itemArray;
+                foreach (KeyValuePair<string, string> item in dataGridComponentTable.SelectedItems)
+                {
+                    if (unionList.Contains(item.Key) == false)
+                    {
+                        unionList.Add(item.Key);
+                    }
+
+                    itemArray = item.Value.Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string itemValue in itemArray)
+                    {
+                        if (unionList.Contains(itemValue) == false)
+                        {
+                            unionList.Add(itemValue);
+                        }
+                    }
+                }
+                unionList.Sort();
+                textBoxunion.Text = string.Join("; ", unionList);
+            }
+            catch (Exception ex)
+            {
+                ModernDialog.ShowMessage(ex.Message, "Error", MessageBoxButton.OK);
             }
         }
     }

@@ -10,14 +10,24 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Button x:Name="buttonShow" Content="Show" Width="75" Click="buttonShow_Click" HorizontalAlignment="Right"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="buttonShow" Grid.Column="1" Content="Show" Click="buttonShow_Click" Margin="3"/>
+            <Button x:Name="buttonUnion" Grid.Column="2" Content="Union Selected" Margin="3" Click="buttonUnion_Click" IsEnabled="False"/>
+        </Grid>
         <DataGrid x:Name="dataGridComponentTable" AutoGenerateColumns="False" Grid.Row="1" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Component" IsReadOnly="True" Binding="{Binding Key}"/>
                 <DataGridTextColumn Header="Static List" Binding="{Binding Value}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <ProgressBar Grid.Row="2" Height="20" Name="progressBarSearch" IsIndeterminate="False" />
+        <TextBox Grid.Row="2" Name="textBoxunion" AllowDrop="False" TextWrapping="NoWrap" Height="40"/>
+        <ProgressBar Grid.Row="3" Height="20" Name="progressBarSearch" IsIndeterminate="False" />
     </Grid>
 </UserControl>
